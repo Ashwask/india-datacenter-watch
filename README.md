@@ -34,6 +34,16 @@ datacenters/
 The dataset currently tracks **187 facilities** across **45 operators**, **30 cities**, and
 **18 states/UTs** — from hyperscale campuses to edge and GPU/AI sites. Every row carries a source.
 
+The site is fully data-driven (Leaflet + Chart.js):
+
+- **Statistics** — live charts: status mix, top operators, cumulative-growth trend, IT load by state.
+- **Key Concerns** — each of the six cards is clickable and opens a data modal with **impact
+  calculations** (energy, CO₂, water, e-waste, homes-equivalent) and **trend graphs** specific to that
+  concern. Estimates are derived transparently from disclosed IT load (PUE 1.6, water 1.8 L/kWh, grid
+  0.71 tCO₂/MWh) and labelled as estimates.
+- **Sources** — full facility directory table with a Source column, plus **Download CSV** (filtered or
+  full dataset).
+
 ## Run the map (no server needed)
 
 ```bash

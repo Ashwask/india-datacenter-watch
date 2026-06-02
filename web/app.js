@@ -324,6 +324,321 @@
     });
   }
 
+  // ========================================================================
+  //  ANALYTICS: aggregations, impact calculations, charts, concern modals
+  // ========================================================================
+  var PAL = ["#539bf5", "#2ea043", "#d29922", "#db61a2", "#3fb6c4", "#f0883e",
+             "#a371f7", "#e5534b", "#57ab5a", "#cc6b2c", "#6cb6ff", "#8ddb8c"];
+  var STATUS_COLOR = { operational: "#2ea043", under_construction: "#d29922", proposed: "#539bf5", community_reported: "#db61a2" };
+
+  // Impact assumptions (transparent, editable here). Annualised, nameplate-based upper estimate.
+  var PUE = 1.6;        // power usage effectiveness (India avg ~1.6–1.8)
+  var WUE = 1.8;        // litres of water per kWh (direct + indirect, combined)
+  var GRID = 0.71;      // tCO2 per MWh (CEA India grid factor)
+  var HH_KWH = 1000;    // approx annual electricity per Indian household (kWh)
+  var HRS = 8760;
+
+  function sum(a) { return a.reduce(function (x, y) { return x + y; }, 0); }
+  function disclosed() { return DATA.filter(function (d) { return d.it_load_mw != null; }); }
+  function totalMW(rows) { return sum(rows.map(function (d) { return d.it_load_mw || 0; })); }
+  function nf(n) { return Math.round(n).toLocaleString("en-IN"); }
+
+  function impact(mw) {
+    var e = mw * PUE * HRS;                 // MWh / year (facility-level, incl. cooling)
+    return {
+      mw: mw, gwh: e / 1000,
+      waterBn: (e * 1000 * WUE) / 1e9,      // billion litres / year
+      co2Mt: (e * GRID) / 1e6,              // million tonnes CO2 / year
+      homes: (e * 1000) / HH_KWH            // homes-equivalent
+    };
+  }
+
+  function countBy(rows, keyFn) {
+    var m = {}; rows.forEach(function (d) { var k = keyFn(d); m[k] = (m[k] || 0) + 1; }); return m;
+  }
+  function topEntries(map, n) {
+    return Object.keys(map).map(function (k) { return [k, map[k]]; })
+      .sort(function (a, b) { return b[1] - a[1]; }).slice(0, n || 99);
+  }
+  function mwByKey(rows, keyFn) {
+    var m = {}; rows.forEach(function (d) { if (d.it_load_mw != null) { var k = keyFn(d); m[k] = (m[k] || 0) + d.it_load_mw; } }); return m;
+  }
+  function cumulativeByYear(rows, valFn) {
+    var byY = {};
+    rows.forEach(function (d) { if (d.commissioned_year != null) byY[d.commissioned_year] = (byY[d.commissioned_year] || 0) + valFn(d); });
+    var years = Object.keys(byY).map(Number).sort(function (a, b) { return a - b; });
+    var cum = 0, labels = [], data = [];
+    years.forEach(function (y) { cum += byY[y]; labels.push(String(y)); data.push(Math.round(cum * 100) / 100); });
+    return { labels: labels, data: data };
+  }
+
+  // ---- chart helpers ----
+  function chartsReady() { return typeof Chart !== "undefined"; }
+  function initChartDefaults() {
+    if (!chartsReady()) return;
+    Chart.defaults.color = "#9aa7b4";
+    Chart.defaults.borderColor = "rgba(42,50,61,.55)";
+    Chart.defaults.font.family = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif';
+    Chart.defaults.maintainAspectRatio = false;
+  }
+  var concernCharts = [];
+  function destroyConcernCharts() { concernCharts.forEach(function (c) { c.destroy(); }); concernCharts = []; }
+  function mk(id, cfg, store) {
+    if (!chartsReady()) return null;
+    var el = document.getElementById(id); if (!el) return null;
+    var c = new Chart(el, cfg); if (store) store.push(c); return c;
+  }
+  function bar(labels, data, opts) {
+    opts = opts || {};
+    return { type: "bar", data: { labels: labels, datasets: [{ data: data, backgroundColor: opts.colors || opts.color || PAL[0], borderRadius: 4 }] },
+      options: { indexAxis: opts.h ? "y" : "x", plugins: { legend: { display: false } },
+        scales: { x: { grid: { display: !opts.h } }, y: { grid: { display: !!opts.h ? false : true }, beginAtZero: true } } } };
+  }
+  function line(labels, data, color) {
+    return { type: "line", data: { labels: labels, datasets: [{ data: data, borderColor: color || PAL[0],
+      backgroundColor: (color || PAL[0]) + "33", fill: true, tension: .25, pointRadius: 2, borderWidth: 2 }] },
+      options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } };
+  }
+  function doughnut(labels, data, colors) {
+    return { type: "doughnut", data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderColor: "#0e1116", borderWidth: 2 }] },
+      options: { cutout: "60%", plugins: { legend: { position: "bottom", labels: { boxWidth: 12, padding: 12 } } } } };
+  }
+  function stacked(labels, ds) {
+    return { type: "bar", data: { labels: labels, datasets: ds },
+      options: { plugins: { legend: { position: "bottom" } }, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } } } };
+  }
+
+  // ---- statistics section charts ----
+  function buildStatsCharts() {
+    if (!chartsReady()) return;
+    var bs = countBy(DATA, function (d) { return d.status; });
+    mk("ch-status", doughnut(
+      ["Operational", "Under construction", "Proposed"],
+      [bs.operational || 0, bs.under_construction || 0, bs.proposed || 0],
+      [STATUS_COLOR.operational, STATUS_COLOR.under_construction, STATUS_COLOR.proposed]
+    ));
+    var ops = topEntries(countBy(DATA, function (d) { return d.operator; }), 12);
+    mk("ch-operators", bar(ops.map(function (e) { return e[0]; }), ops.map(function (e) { return e[1]; }), { h: true, color: PAL[0] }));
+    var trend = cumulativeByYear(DATA, function () { return 1; });
+    mk("ch-trend", line(trend.labels, trend.data, PAL[5]));
+    var smw = topEntries(mwByKey(DATA, function (d) { return d.state; }), 12);
+    mk("ch-statemw", bar(smw.map(function (e) { return e[0]; }), smw.map(function (e) { return Math.round(e[1]); }), { h: true, color: PAL[4] }));
+  }
+
+  // ---- live figures on concern cards ----
+  function setLiveFigures() {
+    var disc = disclosed(), imp = impact(totalMW(disc));
+    var ws = DATA.filter(function (d) { return d.water_stressed; });
+    var pipeline = DATA.filter(function (d) { return d.status === "under_construction" || d.status === "proposed"; });
+    var ops = DATA.filter(function (d) { return d.status === "operational"; });
+    var servers = totalMW(disc) * 2000; // ~0.5 kW IT per server
+    var turnover = Math.round((servers * 20 / 1000) / 4); // 20kg/server, 4-yr refresh, tonnes/yr
+    var live = {
+      energy: "~" + nf(imp.gwh) + " GWh", water: "~" + imp.waterBn.toFixed(1) + " bn L",
+      ewaste: "~" + nf(turnover) + " t/yr", location: ws.length + " facilities",
+      scalability: pipeline.length + " facilities", noise: ops.length + " operational"
+    };
+    Object.keys(live).forEach(function (k) {
+      var el = document.querySelector('[data-live="' + k + '"]'); if (el) el.textContent = live[k];
+    });
+  }
+
+  // ---- concern data modals ----
+  function head(icon, title, desc) {
+    return '<h3 style="font-size:20px;margin:0 0 4px">' + icon + " " + esc(title) + "</h3>" +
+           '<p class="lede" style="margin:0 0 16px">' + desc + "</p>";
+  }
+  function cards(list) {
+    return '<div class="impact-out">' + list.map(function (c) {
+      return '<div class="impact-card ' + (c.cls || "") + '"><div class="n">' + c.n + '</div><div class="l">' + c.l + "</div></div>";
+    }).join("") + "</div>";
+  }
+  function holder(id, title) {
+    return '<div class="chart-card" style="margin-top:14px"><h3>' + esc(title) + '</h3><div class="holder"><canvas id="' + id + '"></canvas></div></div>';
+  }
+  function assumptionNote() {
+    return '<p class="note-sm">Impact figures are best-effort estimates from <b>disclosed IT load only</b>, ' +
+      'annualised at nameplate load. Assumptions: PUE ' + PUE + ', water ' + WUE + ' L/kWh (direct+indirect), grid ' +
+      GRID + ' tCO₂/MWh (CEA). Many facilities do not disclose load, so real totals are higher. Not a substitute for measured data.</p>';
+  }
+  function noCharts() { return chartsReady() ? "" : '<p class="note-sm">⚠ Charts need the Chart.js CDN, which appears blocked. Numbers above are still computed from the dataset.</p>'; }
+
+  var CONCERNS = {
+    energy: function () {
+      var disc = disclosed(), tmw = totalMW(disc), imp = impact(tmw);
+      var html = head("⚡", "Energy Consumption",
+        "Estimated from disclosed IT load across <b>" + disc.length + " of " + DATA.length + "</b> facilities (" + nf(tmw) + " MW).") +
+        cards([
+          { n: nf(tmw) + " MW", l: "Disclosed IT load" },
+          { n: nf(imp.gwh) + " GWh", l: "Est. electricity / year", cls: "e" },
+          { n: imp.co2Mt.toFixed(2) + " Mt", l: "Est. CO₂ / year", cls: "c" },
+          { n: nf(imp.homes / 1000) + "k", l: "Homes-equivalent power", cls: "e" }
+        ]) + holder("cc-e-trend", "Cumulative disclosed IT load by year (MW)") +
+        holder("cc-e-ops", "Top operators by disclosed IT load (MW)") + assumptionNote() + noCharts();
+      return { html: html, draw: function () {
+        var t = cumulativeByYear(disc, function (d) { return d.it_load_mw || 0; });
+        mk("cc-e-trend", line(t.labels, t.data, STATUS_COLOR.under_construction), concernCharts);
+        var o = topEntries(mwByKey(disc, function (d) { return d.operator; }), 10);
+        mk("cc-e-ops", bar(o.map(function (e) { return e[0]; }), o.map(function (e) { return Math.round(e[1]); }), { h: true, color: PAL[5] }), concernCharts);
+      } };
+    },
+    water: function () {
+      var disc = disclosed(), imp = impact(totalMW(disc));
+      var ws = DATA.filter(function (d) { return d.water_stressed; });
+      var pct = Math.round((ws.length / DATA.length) * 100);
+      var statesAff = Object.keys(countBy(ws, function (d) { return d.state; })).length;
+      var html = head("💧", "Water Usage",
+        "Cooling water estimated from disclosed IT load; water-stress flags follow WRI-style regional analysis.") +
+        cards([
+          { n: imp.waterBn.toFixed(1) + " bn L", l: "Est. cooling water / year", cls: "w" },
+          { n: ws.length + " / " + DATA.length, l: "In water-stressed regions", cls: "w" },
+          { n: pct + "%", l: "Share water-stressed", cls: "w" },
+          { n: statesAff, l: "States affected" }
+        ]) + holder("cc-w-state", "Water-stressed facilities by state") +
+        holder("cc-w-mw", "Est. annual cooling water by state (bn L)") + assumptionNote() + noCharts();
+      return { html: html, draw: function () {
+        var byState = topEntries(countBy(ws, function (d) { return d.state; }), 12);
+        mk("cc-w-state", bar(byState.map(function (e) { return e[0]; }), byState.map(function (e) { return e[1]; }), { h: true, color: PAL[4] }), concernCharts);
+        var mwState = topEntries(mwByKey(disc.filter(function (d) { return d.water_stressed; }), function (d) { return d.state; }), 10);
+        mk("cc-w-mw", bar(mwState.map(function (e) { return e[0]; }),
+          mwState.map(function (e) { return Math.round(impact(e[1]).waterBn * 100) / 100; }), { h: true, color: "#3fb6c4" }), concernCharts);
+      } };
+    },
+    ewaste: function () {
+      var disc = disclosed(), tmw = totalMW(disc);
+      var servers = tmw * 2000, mass = servers * 20 / 1000, turnover = mass / 4;
+      var html = head("🗑️", "E-Waste",
+        "First-order estimate from installed IT capacity. Assumes ~0.5 kW IT per server, ~20 kg/server, 4-year refresh.") +
+        cards([
+          { n: nf(tmw) + " MW", l: "Disclosed IT capacity" },
+          { n: nf(servers), l: "Est. servers installed" },
+          { n: nf(mass) + " t", l: "Est. installed hardware" },
+          { n: nf(turnover) + " t/yr", l: "Est. hardware turnover", cls: "c" }
+        ]) + holder("cc-ew-ops", "Hardware footprint proxy — IT load by operator (MW)") +
+        holder("cc-ew-status", "Capacity by status (MW)") + assumptionNote() + noCharts();
+      return { html: html, draw: function () {
+        var o = topEntries(mwByKey(disc, function (d) { return d.operator; }), 10);
+        mk("cc-ew-ops", bar(o.map(function (e) { return e[0]; }), o.map(function (e) { return Math.round(e[1]); }), { h: true, color: PAL[6] }), concernCharts);
+        var st = mwByKey(disc, function (d) { return d.status; });
+        mk("cc-ew-status", doughnut(["Operational", "Under construction", "Proposed"],
+          [Math.round(st.operational || 0), Math.round(st.under_construction || 0), Math.round(st.proposed || 0)],
+          [STATUS_COLOR.operational, STATUS_COLOR.under_construction, STATUS_COLOR.proposed]), concernCharts);
+      } };
+    },
+    location: function () {
+      var ws = DATA.filter(function (d) { return d.water_stressed; });
+      var pct = Math.round((ws.length / DATA.length) * 100);
+      var hubs = DATA.filter(function (d) { return /Chennai|Hyderabad|Visakhapatnam/.test(d.city) && d.water_stressed; }).length;
+      var pipeStressed = ws.filter(function (d) { return d.status !== "operational"; }).length;
+      var html = head("⚠️", "Location Risks",
+        "Where facilities sit relative to water-stressed and high-exposure districts.") +
+        cards([
+          { n: ws.length + " / " + DATA.length, l: "In water-stressed regions", cls: "w" },
+          { n: pct + "%", l: "Share of all facilities", cls: "w" },
+          { n: hubs, l: "In Chennai / Hyderabad / Vizag" },
+          { n: pipeStressed, l: "Planned in stressed regions", cls: "c" }
+        ]) + holder("cc-l-state", "Facilities by state — water-stressed vs not") +
+        holder("cc-l-status", "Status mix within water-stressed regions") + noCharts();
+      return { html: html, draw: function () {
+        var states = topEntries(countBy(DATA, function (d) { return d.state; }), 12).map(function (e) { return e[0]; });
+        var stressed = states.map(function (s) { return DATA.filter(function (d) { return d.state === s && d.water_stressed; }).length; });
+        var notst = states.map(function (s) { return DATA.filter(function (d) { return d.state === s && !d.water_stressed; }).length; });
+        mk("cc-l-state", stacked(states, [
+          { label: "Water-stressed", data: stressed, backgroundColor: "#3fb6c4" },
+          { label: "Not flagged", data: notst, backgroundColor: "#3a4756" }
+        ]), concernCharts);
+        var bs = countBy(ws, function (d) { return d.status; });
+        mk("cc-l-status", doughnut(["Operational", "Under construction", "Proposed"],
+          [bs.operational || 0, bs.under_construction || 0, bs.proposed || 0],
+          [STATUS_COLOR.operational, STATUS_COLOR.under_construction, STATUS_COLOR.proposed]), concernCharts);
+      } };
+    },
+    scalability: function () {
+      var ops = DATA.filter(function (d) { return d.status === "operational"; });
+      var pipe = DATA.filter(function (d) { return d.status === "under_construction" || d.status === "proposed"; });
+      var opMW = totalMW(ops), pipeMW = totalMW(pipe);
+      var mult = opMW > 0 ? (1 + pipeMW / opMW).toFixed(1) + "×" : "—";
+      var html = head("📈", "Scalability &amp; Efficiency",
+        "The build pipeline relative to what is already operational — the strain ahead of the grid.") +
+        cards([
+          { n: ops.length, l: "Operational" },
+          { n: pipe.length, l: "Under construction + proposed", cls: "e" },
+          { n: nf(pipeMW) + " MW", l: "Disclosed pipeline IT load", cls: "e" },
+          { n: mult, l: "Projected capacity vs today" }
+        ]) + holder("cc-s-trend", "Adoption curve — cumulative facilities by year") +
+        holder("cc-s-pipe", "Disclosed pipeline IT load by state (MW)") + noCharts();
+      return { html: html, draw: function () {
+        var t = cumulativeByYear(DATA, function () { return 1; });
+        mk("cc-s-trend", line(t.labels, t.data, STATUS_COLOR.proposed), concernCharts);
+        var ps = topEntries(mwByKey(pipe, function (d) { return d.state; }), 10);
+        mk("cc-s-pipe", bar(ps.map(function (e) { return e[0]; }), ps.map(function (e) { return Math.round(e[1]); }), { h: true, color: STATUS_COLOR.under_construction }), concernCharts);
+      } };
+    },
+    noise: function () {
+      var ops = DATA.filter(function (d) { return d.status === "operational"; });
+      var cities = countBy(ops, function (d) { return d.city; });
+      var top = topEntries(cities, 12);
+      var topCity = top[0] || ["—", 0];
+      var top5 = top.slice(0, 5).reduce(function (a, e) { return a + e[1]; }, 0);
+      var html = head("🔊", "Noise &amp; Local Impact",
+        "Operational facilities run cooling and backup generators 24/7. Density near communities is the exposure proxy.") +
+        cards([
+          { n: ops.length, l: "Operational (run 24/7)" },
+          { n: Object.keys(cities).length, l: "Cities with live facilities" },
+          { n: topCity[1] + " in " + topCity[0], l: "Densest cluster" },
+          { n: top5, l: "In the top-5 hub cities" }
+        ]) + holder("cc-n-city", "Operational facilities by city (community exposure)") + noCharts();
+      return { html: html, draw: function () {
+        mk("cc-n-city", bar(top.map(function (e) { return e[0]; }), top.map(function (e) { return e[1]; }), { h: true, color: PAL[0] }), concernCharts);
+      } };
+    }
+  };
+
+  function openConcern(key) {
+    var def = CONCERNS[key]; if (!def) return;
+    destroyConcernCharts();
+    var built = def();
+    document.getElementById("concern-body").innerHTML = built.html;
+    document.getElementById("modal-concern").classList.add("open");
+    if (built.draw) built.draw();
+  }
+
+  function wireConcerns() {
+    Array.prototype.forEach.call(document.querySelectorAll(".concern[data-concern]"), function (el) {
+      el.addEventListener("click", function () { openConcern(el.getAttribute("data-concern")); });
+    });
+  }
+
+  // ---- CSV download ----
+  var CSV_COLS = ["id", "name", "operator", "city", "state", "latitude", "longitude",
+                  "status", "it_load_mw", "commissioned_year", "water_stressed", "notes", "source"];
+  function toCSV(rows) {
+    function cell(v) {
+      if (v == null) return "";
+      v = String(v);
+      return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+    }
+    var out = [CSV_COLS.join(",")];
+    rows.forEach(function (d) {
+      out.push(CSV_COLS.map(function (c) {
+        if (c === "water_stressed") return d.water_stressed == null ? "" : String(d.water_stressed);
+        return cell(d[c]);
+      }).join(","));
+    });
+    return out.join("\n");
+  }
+  function download(name, text) {
+    var b = new Blob([text], { type: "text/csv;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(b); a.download = name; a.click();
+  }
+  function wireDownloads() {
+    var f = document.getElementById("dl-csv");
+    if (f) f.addEventListener("click", function () { download("india-datacenters-filtered.csv", toCSV(currentFilter())); });
+    var a = document.getElementById("dl-csv-all");
+    if (a) a.addEventListener("click", function () { download("india-datacenters-full.csv", toCSV(DATA)); });
+  }
+
   // ---- init ----
   document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("f-state").addEventListener("change", render);
@@ -336,7 +651,9 @@
       render();
     });
     var tot = document.getElementById("dir-total"); if (tot) tot.textContent = DATA.length;
-    buildHeaderStats(); buildBigStats(); buildStateBars();
+    initChartDefaults();
+    buildHeaderStats(); buildBigStats(); buildStateBars(); buildStatsCharts();
+    setLiveFigures(); wireConcerns(); wireDownloads();
     buildLegend(); buildStateSelect(); wireReport(); wireModals(); wireScrollSpy(); render();
     // Leaflet measures the container on init; if layout settles a tick later
     // (fonts, grid sizing), recalc so tiles fill the map instead of staying blank.

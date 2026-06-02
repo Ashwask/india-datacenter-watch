@@ -101,6 +101,14 @@
   .concern h3{margin:8px 0 6px;font-size:16px}
   .concern p{margin:0;color:var(--muted);font-size:13.5px}
   .concern.water{border-color:#274b52}
+  .concern{cursor:pointer;transition:border-color .12s,transform .12s}
+  .concern:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .concern .more{display:block;margin-top:12px;color:var(--accent);font-size:12.5px;font-weight:700}
+  .concern .live{color:var(--ink);font-weight:700}
+
+  .modal.lg{max-width:880px}
+  .modal.lg .holder{position:relative;height:260px;margin-top:6px}
+  .modal .note-sm{color:var(--faint);font-size:11.5px;margin-top:14px;line-height:1.5}
   .divider{height:1px;background:var(--line);margin:46px 0}
 
   .bigstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:8px}
@@ -161,6 +169,26 @@
   table.dir .sb.proposed{background:var(--proposed)} table.dir .sb.community_reported{background:var(--reported)}
   table.dir a.srclink{color:var(--proposed);word-break:break-all}
   table.dir td.water{color:var(--water);font-weight:700;text-align:center}
+
+  /* charts + impact */
+  .chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:8px}
+  .chart-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .chart-card h3{margin:0 0 12px;font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .chart-card .holder{position:relative;height:240px}
+  .impact-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:8px 0 20px}
+  .impact-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .impact-card .n{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.05}
+  .impact-card .l{color:var(--muted);font-size:12.5px;margin-top:6px}
+  .impact-card.w .n{color:var(--water)} .impact-card.e .n{color:var(--under)} .impact-card.c .n{color:var(--reported)}
+  .assumptions{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:18px}
+  .assume label{display:block;font-size:13px;color:var(--ink);margin-bottom:8px}
+  .assume label b{color:var(--accent)}
+  .assume input[type=range]{width:100%;accent-color:var(--accent)}
+  .assume .hint{color:var(--faint);font-size:11.5px;margin-top:5px}
+  .btn-inline{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#1a1206;border:none;
+    border-radius:9px;padding:9px 14px;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none}
+  .btn-inline:hover{filter:brightness(1.06)}
 
   .stat{cursor:pointer;transition:border-color .12s}
   .stat:hover{border-color:var(--accent)}
@@ -244,6 +272,8 @@
     mirrors the map filters above — filter by status, state, operator, or water-stress and the list narrows
     with it. Showing <b id="dir-count">0</b> of <b id="dir-total">0</b> facilities.
   </p>
+  <p><button class="btn-inline" id="dl-csv">⬇ Download CSV (filtered)</button>
+     <button class="btn-inline" id="dl-csv-all" style="background:transparent;color:var(--ink);border:1px solid var(--line)">⬇ Download full dataset</button></p>
   <div class="tablewrap">
     <div class="tablescroll">
       <table class="dir">
@@ -269,27 +299,42 @@
     communities around them. India's operational stock crossed <b>~1,520&nbsp;MW IT</b> in 2025 (+34% YoY)
     and is projected to triple by 2030. These are the impacts worth watching.
   </p>
+  <p class="lede" style="margin-top:-12px">Click any concern for the underlying data, impact calculations, and trend graphs.</p>
   <div class="concerns">
-    <div class="concern"><div class="ic">⚡</div><h3>Energy Consumption</h3>
+    <div class="concern" data-concern="energy"><div class="ic">⚡</div><h3>Energy Consumption</h3>
       <p>Data centers are ~0.5% of India's electricity demand today, expected to reach 1–2% as the AI buildout
-      accelerates — concentrated on a handful of urban grids.</p></div>
-    <div class="concern water"><div class="ic">💧</div><h3>Water Usage</h3>
+      accelerates — concentrated on a handful of urban grids.</p>
+      <span class="more">⚡ <span class="live" data-live="energy">—</span> est. annual electricity · view data &amp; trends →</span></div>
+    <div class="concern water" data-concern="water"><div class="ic">💧</div><h3>Water Usage</h3>
       <p>Cooling draw is projected to rise from ~150 billion litres (2025) to ~358 billion by 2030. A WRI India
-      analysis found more than half of India's data centers sit in water-stressed regions.</p></div>
-    <div class="concern"><div class="ic">🗑️</div><h3>E-Waste</h3>
+      analysis found more than half of India's data centers sit in water-stressed regions.</p>
+      <span class="more">💧 <span class="live" data-live="water">—</span> est. annual cooling water · view data &amp; trends →</span></div>
+    <div class="concern" data-concern="ewaste"><div class="ic">🗑️</div><h3>E-Waste</h3>
       <p>Rapid server-refresh cycles generate hardware waste. India's e-waste handling capacity lags the growth
-      of compute infrastructure.</p></div>
-    <div class="concern"><div class="ic">⚠️</div><h3>Location Risks</h3>
+      of compute infrastructure.</p>
+      <span class="more">🗑️ <span class="live" data-live="ewaste">—</span> est. hardware turnover · view data &amp; trends →</span></div>
+    <div class="concern" data-concern="location"><div class="ic">⚠️</div><h3>Location Risks</h3>
       <p>Hyperscale campuses are rising in groundwater-stressed and coastal districts — Visakhapatnam, Chennai,
-      Hyderabad — where water diversion and flooding amplify community risk.</p></div>
-    <div class="concern"><div class="ic">📈</div><h3>Scalability &amp; Efficiency</h3>
+      Hyderabad — where water diversion and flooding amplify community risk.</p>
+      <span class="more">⚠️ <span class="live" data-live="location">—</span> in water-stressed regions · view data &amp; trends →</span></div>
+    <div class="concern" data-concern="scalability"><div class="ic">📈</div><h3>Scalability &amp; Efficiency</h3>
       <p>Capacity is being announced far faster than power, water, and grid planning can absorb — straining
-      infrastructure that residents also depend on.</p></div>
-    <div class="concern"><div class="ic">🔊</div><h3>Noise</h3>
+      infrastructure that residents also depend on.</p>
+      <span class="more">📈 <span class="live" data-live="scalability">—</span> in the pipeline · view data &amp; trends →</span></div>
+    <div class="concern" data-concern="noise"><div class="ic">🔊</div><h3>Noise</h3>
       <p>Continuous cooling and backup-generator operation create persistent noise and local air-quality concerns
-      for nearby residents.</p></div>
+      for nearby residents.</p>
+      <span class="more">🔊 <span class="live" data-live="noise">—</span> running 24/7 · view data &amp; trends →</span></div>
   </div>
 </section>
+
+<!-- Concern data modal (populated by app.js) -->
+<div class="modal-overlay" id="modal-concern">
+  <div class="modal lg">
+    <button class="x" data-close>×</button>
+    <div id="concern-body"></div>
+  </div>
+</div>
 
 <div class="content" style="padding-top:0"><div class="divider"></div></div>
 
@@ -298,8 +343,14 @@
   <h2 class="big">Statistics</h2>
   <p class="lede">A live snapshot of what's on the map. Counts update from the dataset, not hand-typed.</p>
   <div class="bigstats" id="bigstats"></div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>By status</h3><div class="holder"><canvas id="ch-status"></canvas></div></div>
+    <div class="chart-card"><h3>Top operators (facilities)</h3><div class="holder"><canvas id="ch-operators"></canvas></div></div>
+    <div class="chart-card"><h3>Growth — cumulative facilities by year</h3><div class="holder"><canvas id="ch-trend"></canvas></div></div>
+    <div class="chart-card"><h3>Disclosed IT load by state (MW)</h3><div class="holder"><canvas id="ch-statemw"></canvas></div></div>
+  </div>
   <div class="topstates">
-    <h3 style="font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Facilities by state</h3>
+    <h3 style="font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Facilities by state — click to filter the map</h3>
     <div id="statebars"></div>
   </div>
 </section>
@@ -457,6 +508,8 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+  integrity="sha256-0q+JdOlScWOHcunpUk21uab1jW7C1deBQARHtKMcaB4=" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>
