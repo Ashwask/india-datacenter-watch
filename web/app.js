@@ -283,8 +283,8 @@
 
   // Clicking a header stat card drives the map filters.
   function statCardAction(act, el) {
-    var strip = document.getElementById("statstrip");
-    Array.prototype.forEach.call(strip.children, function (c) { c.classList.remove("active"); });
+    // Stat cards are momentary filter shortcuts — they apply the filter and jump
+    // to the map; the legend + map show the result, so no sticky highlight.
     if (act === "all") {
       Object.keys(enabled).forEach(function (k) { enabled[k] = true; });
       document.getElementById("f-water").checked = false;
@@ -292,13 +292,11 @@
     } else if (act === "water") {
       var box = document.getElementById("f-water");
       box.checked = !box.checked;
-      if (box.checked && el) el.classList.add("active");
     } else {
       // isolate this status
       Object.keys(enabled).forEach(function (k) { enabled[k] = (k === act); });
       document.getElementById("f-water").checked = false;
       syncLegend();
-      if (el) el.classList.add("active");
     }
     render();
     scrollToMap();
