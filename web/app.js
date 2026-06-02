@@ -36,7 +36,18 @@
   }).addTo(map);
   map.fitBounds(INDIA_BOUNDS, { padding: [10, 10] });
 
-  var layer = L.layerGroup().addTo(map);
+  // Cluster overlapping markers (131/191 facilities share a city-centroid coordinate).
+  // Falls back to a plain layer group if the plugin didn't load.
+  var layer = (typeof L.markerClusterGroup === "function")
+    ? L.markerClusterGroup({
+        maxClusterRadius: 44,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: false,
+        spiderfyDistanceMultiplier: 1.7,
+        chunkedLoading: true
+      })
+    : L.layerGroup();
+  layer.addTo(map);
   var enabled = { operational: true, under_construction: true, proposed: true, community_reported: true };
   var legendRows = {};
 
@@ -567,11 +578,17 @@
     ), persistentCharts);
     var ops = topEntries(countBy(DATA, function (d) { return d.operator; }), 12);
     mk("ch-operators", bar(ops.map(function (e) { return e[0]; }), ops.map(function (e) { return e[1]; }), { h: true, color: PAL[0] }), persistentCharts);
+    var withYear = DATA.filter(function (d) { return d.commissioned_year != null; }).length;
     var trend = cumulativeByYear(DATA, function () { return 1; });
     mk("ch-trend", line(trend.labels, trend.data, PAL[5]), persistentCharts);
+    var withMW = disclosed().length;
     var smw = topEntries(mwByKey(DATA, function (d) { return d.state; }), 12);
     mk("ch-statemw", bar(smw.map(function (e) { return e[0]; }), smw.map(function (e) { return Math.round(e[1]); }), { h: true, color: PAL[4] }), persistentCharts);
+    // Coverage labels — be honest about how much of the dataset each chart reflects.
+    setText("note-trend", "Based on " + withYear + " of " + DATA.length + " facilities with a known commissioning year");
+    setText("note-statemw", "Based on " + withMW + " of " + DATA.length + " facilities disclosing IT load");
   }
+  function setText(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; }
 
   // ---- live figures on concern cards ----
   function setLiveFigures() {

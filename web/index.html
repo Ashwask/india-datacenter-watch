@@ -7,6 +7,10 @@
 <meta name="description" content="An open, community-accountable map of every data center across India: operational, under construction, proposed, and resident-reported — with sources." />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+  integrity="sha256-YU3qCpj/P06tdPBJGPax0bm6Q1wltfwjsho5TR4+TYc=" crossorigin="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+  integrity="sha256-YSWCMtmNZNwqex4CEw1nQhvFub2lmU7vcCKP+XVwwXA=" crossorigin="" />
 <style>
   :root{
     --bg:#0e1116; --panel:#161b22; --panel-2:#1c232c; --line:#2a323d;
@@ -260,7 +264,8 @@
   /* charts + impact */
   .chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:8px}
   .chart-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
-  .chart-card h3{margin:0 0 12px;font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .chart-card h3{margin:0 0 4px;font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .chart-note{font-size:11px;color:var(--faint);margin:0 0 10px}
   .chart-card .holder{position:relative;height:240px}
   .impact-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:8px 0 20px}
   .impact-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
@@ -428,10 +433,10 @@
   <p class="lede">A live snapshot of what's on the map. Counts update from the dataset, not hand-typed.</p>
   <div class="bigstats" id="bigstats"></div>
   <div class="chart-grid">
-    <div class="chart-card"><h3>By status</h3><div class="holder"><canvas id="ch-status"></canvas></div></div>
-    <div class="chart-card"><h3>Top operators (facilities)</h3><div class="holder"><canvas id="ch-operators"></canvas></div></div>
-    <div class="chart-card"><h3>Growth — cumulative facilities by year</h3><div class="holder"><canvas id="ch-trend"></canvas></div></div>
-    <div class="chart-card"><h3>Disclosed IT load by state (MW)</h3><div class="holder"><canvas id="ch-statemw"></canvas></div></div>
+    <div class="chart-card"><h3>By status</h3><div class="chart-note">All 191 facilities</div><div class="holder"><canvas id="ch-status"></canvas></div></div>
+    <div class="chart-card"><h3>Top operators (facilities)</h3><div class="chart-note">All 191 facilities</div><div class="holder"><canvas id="ch-operators"></canvas></div></div>
+    <div class="chart-card"><h3>Growth — cumulative facilities by year</h3><div class="chart-note" id="note-trend"></div><div class="holder"><canvas id="ch-trend"></canvas></div></div>
+    <div class="chart-card"><h3>Disclosed IT load by state (MW)</h3><div class="chart-note" id="note-statemw"></div><div class="holder"><canvas id="ch-statemw"></canvas></div></div>
   </div>
   <div class="chart-card" style="margin-top:14px">
     <h3>Facilities by state — click a bar to filter the map</h3>
@@ -644,6 +649,8 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"
+  integrity="sha256-Hk4dIpcqOSb0hZjgyvFOP+cEmDXUKKNE/tT542ZbNQg=" crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
   integrity="sha256-0q+JdOlScWOHcunpUk21uab1jW7C1deBQARHtKMcaB4=" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="config.js"></script>
