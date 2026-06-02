@@ -141,6 +141,39 @@
   .chip:hover{color:var(--ink)}
   .chip.active{background:var(--accent);color:#1a1206;border-color:var(--accent)}
 
+  /* action / response cards */
+  .action-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:6px}
+  .action{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--faint);
+    border-radius:12px;padding:16px 18px;display:flex;flex-direction:column}
+  .action .catlabel{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+  .action h4{margin:0 0 7px;font-size:15px;line-height:1.3}
+  .action p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+  .action .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;
+    padding-top:10px;border-top:1px dashed var(--line);flex-wrap:wrap}
+  .action .loc{font-size:11px;color:var(--muted);background:var(--panel-2);border:1px solid var(--line);border-radius:20px;padding:2px 9px}
+  .action a.src{font-size:12px;text-decoration:none;white-space:nowrap}
+  /* category accents */
+  .action.policy{border-left-color:#539bf5} .action.policy .catlabel{color:#539bf5} .action.policy a.src{color:#539bf5}
+  .action.regulatory{border-left-color:#d29922} .action.regulatory .catlabel{color:#d29922} .action.regulatory a.src{color:#d29922}
+  .action.legal{border-left-color:#a371f7} .action.legal .catlabel{color:#a371f7} .action.legal a.src{color:#a371f7}
+  .action.transparency{border-left-color:#3fb6c4} .action.transparency .catlabel{color:#3fb6c4} .action.transparency a.src{color:#3fb6c4}
+  .action.rights{border-left-color:#e5534b} .action.rights .catlabel{color:#e5534b} .action.rights a.src{color:#e5534b}
+  .action.mobilization{border-left-color:#2ea043} .action.mobilization .catlabel{color:#3fb950} .action.mobilization a.src{color:#3fb950}
+
+  /* partners */
+  .partners-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:6px}
+  .partner{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 16px;display:block;text-decoration:none}
+  .partner:hover{border-color:var(--accent)}
+  .partner .pname{font-size:14px;font-weight:700;color:var(--ink)}
+  .partner .ptype{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--faint);margin-left:6px}
+  .partner .prole{font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.4}
+  .partner .plink{font-size:11.5px;color:var(--accent);margin-top:9px;display:inline-block}
+
+  .cta-box{background:linear-gradient(180deg,rgba(63,185,80,.08),rgba(63,185,80,.02));border:1px solid rgba(63,185,80,.3);
+    border-radius:var(--radius);padding:26px;text-align:center;margin-top:22px}
+  .cta-box h3{margin:0 0 8px;font-size:18px}
+  .cta-box p{margin:0 auto 16px;color:var(--muted);max-width:560px;font-size:13.5px}
+
   .news{display:grid;gap:10px}
   .news a.item{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;
     padding:14px 16px;text-decoration:none;color:var(--ink)}
@@ -257,6 +290,7 @@
   <a href="#faq">FAQ</a>
   <a href="#statistics">Statistics</a>
   <a href="#impact">Community Impact</a>
+  <a href="#response">Action</a>
   <a href="#concerns">Key Concerns</a>
   <a href="#map">Map</a>
   <a href="#directory">Sources</a>
@@ -417,6 +451,33 @@
   <div class="chips" id="impact-filters"></div>
   <div class="impact" id="impact-list"></div>
   <p class="note-sm" style="margin-top:16px">Quotes are verbatim or tight paraphrases of the cited reporting; click any card's source to read the original. Figures vary by source and methodology and are attributed individually.</p>
+</section>
+
+<div class="content" style="padding-top:0"><div class="divider"></div></div>
+
+<!-- ACTION / RESPONSE -->
+<section class="content" id="response" style="padding-top:0">
+  <h2 class="big">🏛️ Action &amp; accountability</h2>
+  <p class="lede">Impact is only half the story. This tracks how India is <b>responding</b> — state policy,
+    environmental clearances, court cases, RTIs, free-speech fights, and residents organising. Every item is
+    sourced. Showing <b id="action-count">0</b> of <b id="action-total">0</b>.</p>
+  <div class="chips" id="action-filters"></div>
+  <div class="action-grid" id="action-list"></div>
+
+  <div class="cta-box">
+    <h3>Organising, petitioning, or litigating around a data center in India?</h3>
+    <p>If your community is taking action — and it's been covered by a reputable outlet — send it in and we'll
+      track it here.</p>
+    <a class="btn-inline" href="#report">Send your story →</a>
+  </div>
+  <p class="note-sm" style="margin-top:16px">Outcomes evolve quickly — clearances are challenged, policies are
+    revised, cases stay pending. We track and update as they develop.</p>
+
+  <h3 style="font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:40px">
+    Partners &amp; organisations doing this work in India</h3>
+  <p class="lede" style="margin-top:6px">This project stands on the reporting and advocacy of these groups.
+    The accountability work is theirs; we map and connect it.</p>
+  <div class="partners-grid" id="partners-grid"></div>
 </section>
 
 <div class="content" style="padding-top:0"><div class="divider"></div></div>
@@ -586,6 +647,7 @@
 <script src="config.js"></script>
 <script src="data.js"></script>
 <script src="impact_data.js"></script>
+<script src="response_data.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

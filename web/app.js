@@ -757,6 +757,64 @@
 
   function buildImpact() { buildImpactStats(); buildImpactFilters(); renderImpactList(); }
 
+  // ---- action / response + partners (data-driven) ----
+  var ACTIONS = (window.RESPONSE_ACTIONS || []).slice();
+  var PARTNERS = (window.PARTNERS || []).slice();
+  var actionCat = "all";
+  var CAT_LABEL = {
+    policy: "Policy & incentives", regulatory: "Regulatory & clearances", legal: "Legal action",
+    transparency: "Transparency & RTI", rights: "Rights & free speech", mobilization: "Petitions & mobilization"
+  };
+
+  function renderActions() {
+    var el = document.getElementById("action-list"); if (!el) return;
+    var rows = ACTIONS.filter(function (a) { return actionCat === "all" || a.cat === actionCat; });
+    el.innerHTML = rows.map(function (a) {
+      return '<div class="action ' + a.cat + '">' +
+        '<div class="catlabel">' + esc(CAT_LABEL[a.cat] || a.cat) + "</div>" +
+        "<h4>" + esc(a.title) + "</h4>" +
+        "<p>" + esc(a.summary) + "</p>" +
+        '<div class="foot"><span class="loc">' + esc(a.location) + "</span>" +
+        '<a class="src" href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.attribution) + " ↗</a></div></div>";
+    }).join("");
+    var c = document.getElementById("action-count"); if (c) c.textContent = rows.length;
+  }
+
+  function buildActionFilters() {
+    var el = document.getElementById("action-filters"); if (!el) return;
+    var cats = ["all"].concat(Object.keys(CAT_LABEL).filter(function (k) {
+      return ACTIONS.some(function (a) { return a.cat === k; });
+    }));
+    el.innerHTML = cats.map(function (t) {
+      var n = t === "all" ? ACTIONS.length : ACTIONS.filter(function (a) { return a.cat === t; }).length;
+      return '<span class="chip' + (t === actionCat ? " active" : "") + '" data-cat="' + t + '">' +
+        (t === "all" ? "All" : CAT_LABEL[t]) + " · " + n + "</span>";
+    }).join("");
+    Array.prototype.forEach.call(el.querySelectorAll(".chip"), function (chip) {
+      chip.addEventListener("click", function () {
+        actionCat = chip.getAttribute("data-cat");
+        Array.prototype.forEach.call(el.querySelectorAll(".chip"), function (c) { c.classList.remove("active"); });
+        chip.classList.add("active");
+        renderActions();
+      });
+    });
+  }
+
+  function buildPartners() {
+    var el = document.getElementById("partners-grid"); if (!el) return;
+    el.innerHTML = PARTNERS.map(function (p) {
+      return '<a class="partner" href="' + esc(p.url) + '" target="_blank" rel="noopener">' +
+        '<span class="pname">' + esc(p.name) + '</span><span class="ptype">' + esc(p.type) + "</span>" +
+        '<div class="prole">' + esc(p.role) + "</div>" +
+        '<span class="plink">Visit ↗</span></a>';
+    }).join("");
+  }
+
+  function buildResponse() {
+    var t = document.getElementById("action-total"); if (t) t.textContent = ACTIONS.length;
+    buildActionFilters(); renderActions(); buildPartners();
+  }
+
   // ---- CSV download ----
   var CSV_COLS = ["id", "name", "operator", "city", "state", "latitude", "longitude",
                   "status", "it_load_mw", "commissioned_year", "water_stressed", "notes", "source"];
@@ -801,7 +859,7 @@
     var tot = document.getElementById("dir-total"); if (tot) tot.textContent = DATA.length;
     initChartDefaults();
     buildHeaderStats(); buildBigStats(); buildStatsCharts(); buildStateChart();
-    setLiveFigures(); wireConcerns(); wireDownloads(); buildImpact();
+    setLiveFigures(); wireConcerns(); wireDownloads(); buildImpact(); buildResponse();
     buildPhotos(); loadLiveReports();
     buildLegend(); buildStateSelect(); wireReport(); wireModals(); wireScrollSpy(); render();
     // Leaflet measures the container on init; if layout settles a tick later
