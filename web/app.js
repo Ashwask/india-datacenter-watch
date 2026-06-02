@@ -5,6 +5,7 @@
 
   var DATA = (window.DATACENTERS || []).slice();
   var API_BASE = (window.DC_WATCH_API || "").replace(/\/+$/, "");
+  var GH_REPO = window.DC_GITHUB_REPO || "Ashwask/india-datacenter-watch";
 
   var STATUS = {
     operational:        { cls: "operational", label: "Operational" },
@@ -484,16 +485,43 @@
     }
   }
 
+  // Build a pre-filled public GitHub Issue (static — no backend needed).
+  // Deliberately omits private fields (phone/address/email); those only go in
+  // the Download JSON path for private email.
+  function submitViaGitHub() {
+    var r = gatherReport();
+    if (!r.agreed) { msg("Please tick the agreement box first.", "err"); return; }
+    if (!r.location) { msg("Please enter the data center location you're reporting.", "err"); return; }
+    var coords = val("r-coords");
+    var lines = [
+      "**Facility / location:** " + (r.location || "—"),
+      "**Operator / owner:** " + (r.operator || "—"),
+      "**Status:** " + (r.status || "—"),
+      "**Approx. coordinates:** " + (coords || "—"),
+      "",
+      "**Issue witnessed**",
+      r.issue || "—",
+      "",
+      "**Other / sources**",
+      r.other || "—",
+      "",
+      r.name ? "**Reported by:** " + r.name : "",
+      "",
+      "> ⚠️ This issue is public. Don't post private contact details here.",
+      "> 📷 Drag-and-drop photos into this box to attach them.",
+      "",
+      "_Submitted via India Datacenter Watch_"
+    ].filter(function (l) { return l !== null; });
+    var url = "https://github.com/" + GH_REPO + "/issues/new" +
+      "?labels=" + encodeURIComponent("community-report") +
+      "&title=" + encodeURIComponent("[Community report] " + (r.location || "data center")) +
+      "&body=" + encodeURIComponent(lines.join("\n"));
+    window.open(url, "_blank", "noopener");
+    msg("Opening GitHub — review the pre-filled report and click “Submit new issue”. Thank you!", "ok");
+  }
+
   function wireReport() {
-    document.getElementById("r-submit").addEventListener("click", submitToWorker);
-    document.getElementById("r-email").addEventListener("click", function () {
-      var r = gatherReport();
-      if (!r.agreed) { msg("Please tick the agreement box before submitting.", "err"); return; }
-      var body = "New community report for India Datacenter Watch%0D%0A%0D%0A" +
-        Object.keys(r).map(function (k) { return k + ": " + encodeURIComponent(r[k]); }).join("%0D%0A");
-      window.location.href = "mailto:reports@example.org?subject=" +
-        encodeURIComponent("[DC Watch] " + (r.location || "report")) + "&body=" + body;
-    });
+    document.getElementById("r-submit").addEventListener("click", submitViaGitHub);
     document.getElementById("r-download").addEventListener("click", function () {
       var r = gatherReport();
       var blob = new Blob([JSON.stringify(r, null, 2)], { type: "application/json" });

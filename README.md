@@ -44,10 +44,11 @@ The site is fully data-driven (Leaflet + Chart.js):
   0.71 tCO₂/MWh) and labelled as estimates.
 - **Sources** — full facility directory table with a Source column (collapsible), plus **Download CSV**
   (filtered or full dataset).
-- **About / Photos / Report** — an About section, a community Photos gallery, and a report form with photo
-  upload. With the optional Cloudflare Worker backend (`/worker`) deployed and its URL set in
-  `web/config.js`, the form submits live, photos upload, and **approved** reports appear as
-  community-reported map pins and in the gallery. Without it, the form falls back to email / JSON download.
+- **About / Photos / Report** — an About section, a community Photos gallery, and a report form. The form
+  submits as a pre-filled **GitHub Issue** (fully static — works on GitHub Pages, no backend); private
+  fields stay out of the public issue, and "Download JSON" is offered for private email. We review each
+  issue and promote verified facilities into the dataset. An **optional** Cloudflare Worker (`/worker`) can
+  be added for live photo uploads + approved community pins, but is not required.
 - **Terms / Privacy** — standalone `terms.html` / `privacy.html` pages.
 
 ## Run the map (no server needed)

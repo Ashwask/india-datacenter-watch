@@ -612,8 +612,11 @@
 <section class="content" id="report" style="padding-top:0">
   <h2 class="big">Report an Issue</h2>
   <p class="lede" id="report-intro">
-    Add a facility we're missing, or document local impact you're witnessing — with photos. We review every
-    submission before it appears on the map as <b>community-reported</b>.
+    Add a facility we're missing, or document local impact. <b>Submit on GitHub</b> opens a pre-filled issue
+    on our public repo — review it and click <i>Submit new issue</i> (a free GitHub account is needed). We
+    review every report before it appears on the map as <b>community-reported</b>.
+    <br><span class="small">GitHub issues are public, so your name/contact and photos are only included if you
+    add them there. To send contact details privately instead, use <b>Download JSON</b> and email it.</span>
   </p>
   <form class="report" id="reportForm" onsubmit="return false;">
     <div class="field"><label>Name</label><input type="text" id="r-contact" /></div>
@@ -633,13 +636,11 @@
     </div>
     <div class="field full"><label>Issue you have witnessed (water, power, noise, land, e-waste…)</label><textarea id="r-notes"></textarea></div>
     <div class="field full"><label>Other areas to address (sources, links)</label><textarea id="r-other"></textarea></div>
-    <div class="field full"><label>Photos (optional, up to 5 — JPG/PNG/HEIC, 10&nbsp;MB each)</label>
-      <input type="file" id="r-photos" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple /></div>
+    <div class="full note-box">📷 Photos: after you click <b>Submit on GitHub</b>, drag-and-drop images straight into the issue (GitHub hosts them). Phone/address/email you enter here are <b>not</b> put in the public issue.</div>
     <label class="toggle full"><input type="checkbox" id="r-agree" /> I agree my report may be reviewed and, if verified, shown publicly on the map. (See <a href="terms.html" target="_blank">Terms</a> &amp; <a href="privacy.html" target="_blank">Privacy</a>.)</label>
     <div class="full" style="display:flex;gap:12px;flex-wrap:wrap">
-      <button class="btn" style="max-width:200px" id="r-submit">Submit report</button>
-      <button class="btn ghost" style="max-width:170px" id="r-email">Email instead</button>
-      <button class="btn ghost" style="max-width:170px" id="r-download">Download JSON</button>
+      <button class="btn" style="max-width:210px" id="r-submit">Submit on GitHub →</button>
+      <button class="btn ghost" style="max-width:180px" id="r-download">Download JSON</button>
     </div>
     <div class="full note-box" id="r-status-msg" style="display:none"></div>
   </form>
