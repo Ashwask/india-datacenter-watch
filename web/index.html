@@ -84,6 +84,9 @@
   .small{font-size:12px;color:var(--faint)}
 
   #map{height:72vh;min-height:520px;background:#0b0e12}
+  /* keep Leaflet's top controls clear of the sticky nav bar */
+  .leaflet-top{top:54px}
+  .leaflet-control-zoom{box-shadow:0 1px 6px rgba(0,0,0,.5)}
   .leaflet-popup-content-wrapper{background:var(--panel);color:var(--ink);border-radius:12px;border:1px solid var(--line)}
   .leaflet-popup-tip{background:var(--panel);border:1px solid var(--line)}
   .leaflet-popup-content{margin:13px 15px;font-size:13.5px}

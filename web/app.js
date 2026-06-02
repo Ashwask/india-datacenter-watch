@@ -23,11 +23,18 @@
     });
   }
 
-  // ---- map ----
-  var map = L.map("map", { scrollWheelZoom: true, zoomControl: true }).setView([22.0, 80.0], 5);
+  // ---- map (locked to India) ----
+  var INDIA_BOUNDS = L.latLngBounds([6.4, 67.5], [35.8, 97.5]);
+  var map = L.map("map", {
+    scrollWheelZoom: true, zoomControl: true,
+    minZoom: 4, maxZoom: 19,
+    maxBounds: INDIA_BOUNDS, maxBoundsViscosity: 1.0
+  });
   L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19, subdomains: "abcd"
+    attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19, subdomains: "abcd",
+    bounds: INDIA_BOUNDS, noWrap: true
   }).addTo(map);
+  map.fitBounds(INDIA_BOUNDS, { padding: [10, 10] });
 
   var layer = L.layerGroup().addTo(map);
   var enabled = { operational: true, under_construction: true, proposed: true, community_reported: true };
