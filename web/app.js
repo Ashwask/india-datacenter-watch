@@ -609,6 +609,54 @@
     });
   }
 
+  // ---- community impact (data-driven) ----
+  var STORIES = (window.IMPACT_STORIES || []).slice();
+  var ISTATS = (window.IMPACT_STATS || []).slice();
+  var impactTheme = "all";
+
+  function impactHost(url) { try { return url.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]; } catch (e) { return "source"; } }
+
+  function buildImpactStats() {
+    var el = document.getElementById("impact-stats"); if (!el) return;
+    el.innerHTML = ISTATS.map(function (s) {
+      return '<div class="istat"><div class="v">' + esc(s.value) + '</div>' +
+        '<div class="s">' + esc(s.stat) + '</div>' +
+        '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.attribution) + " ↗</a></div>";
+    }).join("");
+  }
+
+  function renderImpactList() {
+    var el = document.getElementById("impact-list"); if (!el) return;
+    var rows = STORIES.filter(function (s) { return impactTheme === "all" || s.theme === impactTheme; });
+    el.innerHTML = rows.map(function (s) {
+      return "<blockquote>" + esc(s.quote) +
+        '<div class="meta"><cite>— ' + esc(s.attribution) + "</cite>" +
+        '<span><span class="loc">' + esc(s.location) + "</span> " +
+        '<a class="src" href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(impactHost(s.url)) + " ↗</a></span></div></blockquote>";
+    }).join("");
+    var c = document.getElementById("impact-count"); if (c) c.textContent = rows.length;
+  }
+
+  function buildImpactFilters() {
+    var el = document.getElementById("impact-filters"); if (!el) return;
+    var themes = ["all"].concat(Array.from(new Set(STORIES.map(function (s) { return s.theme; }))).sort());
+    el.innerHTML = themes.map(function (t) {
+      var n = t === "all" ? STORIES.length : STORIES.filter(function (s) { return s.theme === t; }).length;
+      return '<span class="chip' + (t === impactTheme ? " active" : "") + '" data-theme="' + t + '">' +
+        (t === "all" ? "All" : t) + " · " + n + "</span>";
+    }).join("");
+    Array.prototype.forEach.call(el.querySelectorAll(".chip"), function (chip) {
+      chip.addEventListener("click", function () {
+        impactTheme = chip.getAttribute("data-theme");
+        Array.prototype.forEach.call(el.querySelectorAll(".chip"), function (c) { c.classList.remove("active"); });
+        chip.classList.add("active");
+        renderImpactList();
+      });
+    });
+  }
+
+  function buildImpact() { buildImpactStats(); buildImpactFilters(); renderImpactList(); }
+
   // ---- CSV download ----
   var CSV_COLS = ["id", "name", "operator", "city", "state", "latitude", "longitude",
                   "status", "it_load_mw", "commissioned_year", "water_stressed", "notes", "source"];
@@ -653,7 +701,7 @@
     var tot = document.getElementById("dir-total"); if (tot) tot.textContent = DATA.length;
     initChartDefaults();
     buildHeaderStats(); buildBigStats(); buildStateBars(); buildStatsCharts();
-    setLiveFigures(); wireConcerns(); wireDownloads();
+    setLiveFigures(); wireConcerns(); wireDownloads(); buildImpact();
     buildLegend(); buildStateSelect(); wireReport(); wireModals(); wireScrollSpy(); render();
     // Leaflet measures the container on init; if layout settles a tick later
     // (fonts, grid sizing), recalc so tiles fill the map instead of staying blank.
