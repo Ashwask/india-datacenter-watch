@@ -43,7 +43,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "ka-bengaluru-stt-blr2",
@@ -58,7 +58,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "ka-bengaluru-stt-blr3",
@@ -73,7 +73,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "dl-noida-stt-delhi1",
@@ -88,7 +88,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "dl-noida-stt-delhi2",
@@ -103,7 +103,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "dl-noida-stt-delhi3",
@@ -118,7 +118,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "up-noida-stt-noida1",
@@ -133,7 +133,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "up-noida-stt-noida2",
@@ -148,7 +148,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "rj-jaipur-stt-jaipur1",
@@ -163,7 +163,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "wb-kolkata-stt-kol1",
@@ -178,7 +178,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "wb-kolkata-stt-kol2",
@@ -193,7 +193,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-mumbai-stt-mum1",
@@ -208,7 +208,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-mumbai-stt-mum2",
@@ -223,7 +223,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-mumbai-stt-mum3",
@@ -238,7 +238,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-mumbai-stt-mum4",
@@ -253,7 +253,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-navimumbai-stt-nav1",
@@ -268,7 +268,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "MIDC Mahape campus",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-navimumbai-stt-nav2",
@@ -283,7 +283,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "MIDC Mahape campus",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-navimumbai-stt-nav3",
@@ -298,7 +298,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "MIDC Mahape campus",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-navimumbai-stt-palava",
@@ -313,7 +313,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Palava campus near Dombivli",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-pune-stt-pune1",
@@ -328,7 +328,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Five-building Pune campus",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-pune-stt-pune2",
@@ -343,7 +343,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Five-building Pune campus",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-pune-stt-pune3",
@@ -358,7 +358,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Five-building Pune campus",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-pune-stt-pune4",
@@ -373,7 +373,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Five-building Pune campus",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "mh-pune-stt-pune5",
@@ -388,7 +388,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Five-building Pune campus",
-    "source": "https://baxtel.com/data-centers/st-telemedia-global-data-centres-stt-gdc"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "gj-gandhinagar-stt-ahmedabad1",
@@ -418,7 +418,7 @@ window.DATACENTERS = [
     "commissioned_year": 2007,
     "water_stressed": true,
     "notes": "HITEC City Madhapur; TIA-942 Rated-3",
-    "source": "https://www.datacentermap.com/india/hyderabad/stt-hyderabad-dc1/"
+    "source": "https://www.sttelemediagdc.com/in-en/locations"
   },
   {
     "id": "tg-hyderabad-stt-meerkhanpet",
@@ -448,7 +448,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Chandivali/Andheri campus (ex-Netmagic)",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "mh-mumbai-ntt-dc6",
@@ -463,7 +463,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Andheri (ex-Netmagic)",
-    "source": "https://www.datacentermap.com/india/mumbai/netmagic-andheri/"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "mh-mumbai-ntt-dc7",
@@ -478,7 +478,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Chandivali campus",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "mh-mumbai-ntt-dc8",
@@ -493,7 +493,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Chandivali campus",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "mh-mumbai-ntt-dc9",
@@ -508,7 +508,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Chandivali campus",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "mh-mumbai-ntt-dc10",
@@ -523,7 +523,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Chandivali campus",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "mh-mumbai-ntt-vikhroli",
@@ -538,7 +538,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Vikhroli (ex-Netmagic Mumbai 2)",
-    "source": "https://www.datacentermap.com/india/mumbai/netmagic-vikhroli/"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "mh-mumbai-ntt-vikhroli4",
@@ -553,7 +553,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Vikhroli campus",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "mh-navimumbai-ntt-nav1a",
@@ -613,7 +613,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "ex-Netmagic Bangalore",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "ka-bengaluru-ntt-dc3",
@@ -628,7 +628,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "ka-bengaluru-ntt-dc4",
@@ -643,7 +643,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "BLR 4A/4B/4C campus",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "tn-chennai-ntt-dc1",
@@ -658,7 +658,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "1500 sqm IT space; 4MW IT load",
-    "source": "https://www.datacenters.com/locations/india"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "tn-chennai-ntt-dc2",
@@ -673,7 +673,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "up-noida-ntt-noida1",
@@ -688,7 +688,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "ex-Netmagic Delhi/Noida",
-    "source": "https://baxtel.com/data-centers/ntt"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "up-noida-ntt-noida2",
@@ -718,7 +718,7 @@ window.DATACENTERS = [
     "commissioned_year": 2024,
     "water_stressed": false,
     "notes": "Bengal Silicon Valley; 2 buildings, up to 40MW",
-    "source": "https://www.datacentermap.com/india/kolkata/gdc-kolkata-1-data-center/"
+    "source": "https://services.global.ntt/en-us/services-and-products/global-data-centers/global-locations/india"
   },
   {
     "id": "tg-hyderabad-ntt-aicluster",
@@ -748,7 +748,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "HITEC City Madhapur; first CtrlS facility",
-    "source": "https://www.datacentermap.com/india/hyderabad/ctrls-data-center/"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "tg-hyderabad-ctrls-dc2",
@@ -763,7 +763,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Financial District Gachibowli area",
-    "source": "https://www.datacenters.com/ctrls-ltd-hyderabad-dc-2"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "tg-hyderabad-ctrls-dc3",
@@ -793,7 +793,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "40-acre park up to 600MW",
-    "source": "https://www.datacentermap.com/india/hyderabad/ctrls-chandanvelly-industrial-park/"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "mh-mumbai-ctrls-campus",
@@ -808,7 +808,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Mahape campus expanding to 13 buildings",
-    "source": "https://www.datacenters.com/ctrls-ltd-mumbai-dc1"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "tn-chennai-ctrls-dc-park",
@@ -823,7 +823,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "1M sq ft two buildings 72MW IT load",
-    "source": "https://baxtel.com/data-center/ctrls-chennai-datacenter-park"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "up-noida-ctrls-dc",
@@ -838,7 +838,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Rated-4 NCR facility",
-    "source": "https://www.datacentermap.com/india/new-delhi/ctrls-datacenters/"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "ka-bengaluru-ctrls-dc",
@@ -883,7 +883,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": null,
     "notes": "Edge DC Rs400cr investment",
-    "source": "https://baxtel.com/data-centers/ctrls-datacenters-ltd"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "up-lucknow-ctrls-edge",
@@ -898,7 +898,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Gomti Nagar edge facility; 49 racks; 2500 sqft",
-    "source": "https://baxtel.com/data-centers/ctrls-datacenters-ltd"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "gj-ahmedabad-ctrls-edge",
@@ -913,7 +913,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Edge DC 800 racks",
-    "source": "https://baxtel.com/data-centers/ctrls-datacenters-ltd"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "mp-bhopal-ctrls-edge",
@@ -928,7 +928,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": null,
     "notes": "Badwai IT Park 5-acre",
-    "source": "https://baxtel.com/data-centers/ctrls-datacenters-ltd"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "gj-gandhinagar-ctrls-gift",
@@ -943,7 +943,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Tier IV at GIFT City",
-    "source": "https://baxtel.com/data-centers/ctrls-datacenters-ltd"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "as-guwahati-ctrls-edge",
@@ -958,7 +958,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": null,
     "notes": "Rated-4 edge Tech City Park",
-    "source": "https://baxtel.com/data-centers/ctrls-datacenters-ltd"
+    "source": "https://www.ctrls.com/datacenters/"
   },
   {
     "id": "tn-chennai-sify-01-tidel",
@@ -973,7 +973,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Tidel Park 800+ racks",
-    "source": "https://www.datacenters.com/sify-technologies-limited-chennai-01-tidel-park"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "tn-chennai-sify-02-siruseri",
@@ -1003,7 +1003,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "India's first commercial DC 375 racks",
-    "source": "https://www.datacentermap.com/india/navi-mumbai/airoli/"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "mh-navimumbai-sify-02-airoli",
@@ -1018,7 +1018,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "1345 racks",
-    "source": "https://www.datacentermap.com/india/navi-mumbai/airoli/"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "mh-navimumbai-sify-03-rabale",
@@ -1033,7 +1033,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Largest hyperscale campus 12 towers planned",
-    "source": "https://www.datacentermap.com/india/mumbai/sify-rabale/"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "up-noida-sify-01",
@@ -1048,7 +1048,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "First green DC 2100 racks",
-    "source": "https://www.datacenters.com/sify-technologies-limited-noida-01-dc"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "up-noida-sify-02",
@@ -1063,7 +1063,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Hyperscale 130+MW planned three towers",
-    "source": "https://baxtel.com/data-centers/sify-technologies"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "ka-bengaluru-sify-01",
@@ -1078,7 +1078,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Cyber Park Electronic City 600+ racks",
-    "source": "https://www.datacenters.com/sify-technologies-limited-bangalore-01"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "ka-bengaluru-sify-02-aerospace",
@@ -1093,7 +1093,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Aerospace Park 40+MW first tower 2025",
-    "source": "https://baxtel.com/data-centers/sify-technologies"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "tg-hyderabad-sify-01",
@@ -1108,7 +1108,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Banjara Hills 2400 racks",
-    "source": "https://baxtel.com/data-centers/sify-technologies"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "tg-hyderabad-sify-02-fabcity",
@@ -1123,7 +1123,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Fab City up to 250+MW",
-    "source": "https://baxtel.com/data-centers/sify-technologies"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "wb-kolkata-sify-01",
@@ -1138,7 +1138,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "400+ racks",
-    "source": "https://www.datacenters.com/sify-technologies-limited-kolkata-01-dc"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "ap-visakhapatnam-sify-rushikonda",
@@ -1153,7 +1153,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "AI Edge DC Meta partnership reported",
-    "source": "https://baxtel.com/data-centers/sify-technologies"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "ch-chandigarh-sify",
@@ -1168,7 +1168,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": null,
     "notes": "Phase I operational Oct 2025",
-    "source": "https://baxtel.com/data-centers/sify-technologies"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "up-lucknow-sify",
@@ -1198,7 +1198,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Phase I expected 2026",
-    "source": "https://baxtel.com/data-centers/sify-technologies"
+    "source": "https://www.sifytechnologies.com/data-center/"
   },
   {
     "id": "mh-mumbai-nxtra-mum1",
@@ -1213,7 +1213,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Airoli ~1100 racks",
-    "source": "https://www.datacentermap.com/india/mumbai/nxtra-mumbai-i/"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "mh-mumbai-nxtra-mum2",
@@ -1228,7 +1228,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Chandivali ~600 racks",
-    "source": "https://baxtel.com/data-center/nxtra-data-mumbai-ii"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "mh-mumbai-nxtra-mum3",
@@ -1243,7 +1243,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/nxtra-data-ltd"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "mh-pune-nxtra-pun1",
@@ -1258,7 +1258,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Kharadi",
-    "source": "https://baxtel.com/data-center/nxtra-data-pune"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "mh-pune-nxtra-pun2",
@@ -1273,7 +1273,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Hinjewadi",
-    "source": "https://baxtel.com/data-centers/nxtra-data-ltd"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "mh-pune-nxtra-pun3",
@@ -1288,7 +1288,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Hinjewadi 1M sqft campus 12500 racks",
-    "source": "https://baxtel.com/data-centers/nxtra-data-ltd"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "tn-chennai-nxtra-chn1",
@@ -1333,7 +1333,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Siruseri; city total ~46 MW",
-    "source": "https://baxtel.com/data-centers/nxtra-data-ltd"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "wb-kolkata-nxtra-kol1",
@@ -1348,7 +1348,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "New Town Bengal Silicon Valley Rs600cr",
-    "source": "https://baxtel.com/data-centers/nxtra-data-ltd"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "up-noida-nxtra-ncr1",
@@ -1363,7 +1363,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Sector 62 ~1200 racks",
-    "source": "https://baxtel.com/data-center/nxtra-data-noida-i"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "up-noida-nxtra-ncr2",
@@ -1378,7 +1378,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Sector 81 ~1500 racks",
-    "source": "https://baxtel.com/data-center/nxtra-data-noida-ii"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "up-noida-nxtra-ncr4",
@@ -1393,7 +1393,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/nxtra-data-ltd"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "hr-manesar-nxtra-ncr3",
@@ -1408,7 +1408,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "IMT Manesar Sector 8 ~1800 racks",
-    "source": "https://baxtel.com/data-center/nxtra-data-manesar"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "ka-bengaluru-nxtra-blr1",
@@ -1423,7 +1423,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-center/nxtra-bengaluru-i"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "ka-bengaluru-nxtra-blr2",
@@ -1438,7 +1438,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "450000 sqft hyperscale ~5000 racks",
-    "source": "https://baxtel.com/data-centers/nxtra-data-ltd"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "tg-hyderabad-nxtra-hyd1",
@@ -1453,7 +1453,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": null,
-    "source": "https://baxtel.com/data-centers/nxtra-data-ltd"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "tg-hyderabad-nxtra-hyd2",
@@ -1483,7 +1483,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": null,
     "notes": "Infocity Avenue Patia",
-    "source": "https://www.datacentermap.com/india/bhubaneswar/nxtra-bhubaneswar-i/"
+    "source": "https://www.nxtra.in/"
   },
   {
     "id": "mh-mumbai-ironmountain-mum1",
@@ -1573,7 +1573,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Kondapur Main Road",
-    "source": "https://www.datacenters.com/web-werks-india-pvt-ltd-hyderabad"
+    "source": "https://www.ironmountain.com/data-centers/locations"
   },
   {
     "id": "mh-mumbai-ironmountain-newcampus",
@@ -1618,7 +1618,7 @@ window.DATACENTERS = [
     "commissioned_year": 2024,
     "water_stressed": true,
     "notes": "Chandanvelly/Pargi Road; 100MW IT load; Phase 1 live Oct 2024",
-    "source": "https://www.datacentermap.com/india/hyderabad/adaniconnex-hyderabad/"
+    "source": "https://www.adaniconnex.com/data-centers"
   },
   {
     "id": "up-noida-adani-dc1",
@@ -1708,7 +1708,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Listed under construction",
-    "source": "https://baxtel.com/data-centers/adaniconnex"
+    "source": "https://www.adaniconnex.com/data-centers"
   },
   {
     "id": "ka-bengaluru-adani-dc1",
@@ -1723,7 +1723,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Planned campus",
-    "source": "https://baxtel.com/data-centers/adaniconnex"
+    "source": "https://www.adaniconnex.com/data-centers"
   },
   {
     "id": "od-bhubaneswar-adani-dc1",
@@ -1738,7 +1738,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Planned campus",
-    "source": "https://baxtel.com/data-centers/adaniconnex"
+    "source": "https://www.adaniconnex.com/data-centers"
   },
   {
     "id": "mh-mumbai-adani-dc1",
@@ -1753,7 +1753,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Listed operational",
-    "source": "https://baxtel.com/data-centers/adaniconnex"
+    "source": "https://www.adaniconnex.com/data-centers"
   },
   {
     "id": "mh-navi-mumbai-yotta-nm1",
@@ -1918,7 +1918,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Dighe; 350000 sq ft; 20MW; 16 data halls",
-    "source": "https://www.datacentermap.com/india/navi-mumbai/bdc-bby01/"
+    "source": "https://www.bridgedc.com/"
   },
   {
     "id": "mh-navi-mumbai-capitaland-mumbai01",
@@ -2473,7 +2473,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Reliable Tech Park Airoli; Tier III",
-    "source": "https://baxtel.com/data-center/esds-airoli-dc"
+    "source": "https://www.esds.co.in/our-datacenter"
   },
   {
     "id": "ka-bengaluru-esds",
@@ -2488,7 +2488,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Electronic City Phase-1; Tier III",
-    "source": "https://www.datacentermap.com/india/bangalore/esds-bengaluru-dc/"
+    "source": "https://www.esds.co.in/our-datacenter"
   },
   {
     "id": "pb-mohali-esds",
@@ -2518,7 +2518,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "High Density Datacenter; up to 20MW; partly with BSNL",
-    "source": "https://www.datacentermap.com/india/bangalore/nxtgen-hddc/"
+    "source": "https://www.nxtgen.com/data-centers"
   },
   {
     "id": "mh-pune-tata-comm",
@@ -2533,7 +2533,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Tata's largest Indian DC on Alandi Rd",
-    "source": "https://www.datacentermap.com/india/pune/tata-pune/"
+    "source": "https://www.tatacommunications.com/"
   },
   {
     "id": "rj-jaipur-everdata",
@@ -2548,7 +2548,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "ISO 27001; BFSI; Gopalpura Bypass Rd",
-    "source": "https://www.datacentermap.com/india/jaipur/everdata-datacenters/"
+    "source": "https://www.everdata.com/"
   },
   {
     "id": "rj-jaipur-serverwala",
@@ -2563,7 +2563,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "~11MW; HQ DC",
-    "source": "https://www.datacentermap.com/india/jaipur/serverwala-dc/"
+    "source": "https://www.serverwala.com/"
   },
   {
     "id": "ap-amaravati-pi",
@@ -2608,7 +2608,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "Tier III colocation in Infocity Gandhinagar",
-    "source": "https://www.datacentermap.com/india/ahmedabad/ishan-technologies-gandhinagar/"
+    "source": "https://www.ishantechnologies.com/"
   },
   {
     "id": "ke-kochi-arideocean",
@@ -2623,7 +2623,7 @@ window.DATACENTERS = [
     "commissioned_year": 2000,
     "water_stressed": false,
     "notes": "KINFRA Kalamassery; hosting since 2000",
-    "source": "https://www.datacentermap.com/india/cochin/aride-oceandc/"
+    "source": "https://www.arideocean.com/"
   },
   {
     "id": "ke-kochi-dtsnet",
@@ -2638,7 +2638,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": false,
     "notes": "Mamangalam Cochin",
-    "source": "https://www.datacentermap.com/india/cochin/datazone-internet-data-center/"
+    "source": "https://www.dts-net.com/"
   },
   {
     "id": "tn-coimbatore-servercake",
@@ -2653,7 +2653,7 @@ window.DATACENTERS = [
     "commissioned_year": null,
     "water_stressed": true,
     "notes": "First DC in Coimbatore; rack colocation",
-    "source": "https://www.datacentermap.com/india/coimbatore/"
+    "source": "https://servercake.in/"
   },
   {
     "id": "mh-nagpur-reliance-mauda",
