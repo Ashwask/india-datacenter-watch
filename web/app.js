@@ -616,13 +616,33 @@
 
   function impactHost(url) { try { return url.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]; } catch (e) { return "source"; } }
 
+  function setImpactTheme(t) {
+    impactTheme = t;
+    var fl = document.getElementById("impact-filters");
+    if (fl) Array.prototype.forEach.call(fl.querySelectorAll(".chip"), function (c) {
+      c.classList.toggle("active", c.getAttribute("data-theme") === t);
+    });
+    renderImpactList();
+  }
+
   function buildImpactStats() {
     var el = document.getElementById("impact-stats"); if (!el) return;
     el.innerHTML = ISTATS.map(function (s) {
-      return '<div class="istat"><div class="v">' + esc(s.value) + '</div>' +
+      var go = s.theme === "all" ? "See all reports →" : "See " + s.theme + " reports →";
+      return '<div class="istat" data-theme="' + esc(s.theme) + '" title="Filter the reports below">' +
+        '<div class="v">' + esc(s.value) + '</div>' +
         '<div class="s">' + esc(s.stat) + '</div>' +
-        '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.attribution) + " ↗</a></div>";
+        '<a href="' + esc(s.url) + '" target="_blank" rel="noopener" data-src="1">' + esc(s.attribution) + " ↗</a>" +
+        '<div class="go">' + go + "</div></div>";
     }).join("");
+    Array.prototype.forEach.call(el.querySelectorAll(".istat"), function (card) {
+      card.addEventListener("click", function (e) {
+        if (e.target.closest("[data-src]")) return; // let the source link open in a new tab
+        setImpactTheme(card.getAttribute("data-theme"));
+        var anchor = document.getElementById("impact-filters");
+        if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
   }
 
   function renderImpactList() {
@@ -646,12 +666,7 @@
         (t === "all" ? "All" : t) + " · " + n + "</span>";
     }).join("");
     Array.prototype.forEach.call(el.querySelectorAll(".chip"), function (chip) {
-      chip.addEventListener("click", function () {
-        impactTheme = chip.getAttribute("data-theme");
-        Array.prototype.forEach.call(el.querySelectorAll(".chip"), function (c) { c.classList.remove("active"); });
-        chip.classList.add("active");
-        renderImpactList();
-      });
+      chip.addEventListener("click", function () { setImpactTheme(chip.getAttribute("data-theme")); });
     });
   }
 

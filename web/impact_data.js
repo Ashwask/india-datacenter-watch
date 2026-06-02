@@ -1,18 +1,18 @@
 // Community-impact reporting and national statistics, scraped from published sources.
 // Each story carries a verbatim/paraphrased claim, attribution, source URL, location and theme.
 window.IMPACT_STATS = [
-  { stat: "India's operational data-centre capacity quadrupled in five years", value: "0.4 GW (2020) → ~1.5 GW (2025)", attribution: "Press Information Bureau, via Mongabay India", url: "https://india.mongabay.com/2026/05/india-bets-on-data-centres-even-as-water-energy-use-concerns-mount/" },
-  { stat: "Projected capacity growth by 2030", value: "~1.4 GW → ~9 GW", attribution: "IEEFA", url: "https://ieefa.org/resources/indias-power-hungry-data-centre-sector-crossroads" },
-  { stat: "Data-centre share of India's electricity", value: "~0.5% (2024) → >2× by 2030", attribution: "CEEW with SYSTEMIQ", url: "https://www.ceew.in/publications/how-is-data-centre-infrastructure-in-india-shaping-power-and-water-use" },
-  { stat: "Longer-run electricity share", value: "<1% now → ~3% by 2030", attribution: "IEEFA", url: "https://ieefa.org/resources/indias-power-hungry-data-centre-sector-crossroads" },
-  { stat: "Annual data-centre water consumption", value: "~150 → 358 billion litres by 2030", attribution: "Mordor Intelligence, via Reccessary (CEEW corroborates baseline)", url: "https://www.reccessary.com/en/news/india-ai-data-center-water-crisis" },
-  { stat: "Share of data centres in water-stressed regions", value: ">50%", attribution: "WRI India mapping, via Mongabay India", url: "https://india.mongabay.com/2026/05/india-bets-on-data-centres-even-as-water-energy-use-concerns-mount/" },
-  { stat: "New builds since 2022 sited in water-stressed regions", value: "~2 in 3", attribution: "Bloomberg, via Reccessary", url: "https://www.reccessary.com/en/news/india-ai-data-center-water-crisis" },
-  { stat: "Data-centre investment commitments 2019–2025", value: "~USD 94 billion", attribution: "Cushman & Wakefield", url: "https://www.cushmanwakefield.com/en/india/insights/india-data-centre-update" },
-  { stat: "Typical India PUE / WUE ranges", value: "PUE 1.0–2.0 · WUE 0–2.5 L/kWh", attribution: "CEEW, via Mongabay India", url: "https://india.mongabay.com/2026/05/india-bets-on-data-centres-even-as-water-energy-use-concerns-mount/" },
-  { stat: "State DC policies with any sustainability parameters", value: "5 of 15", attribution: "CEEW, via Reccessary", url: "https://www.reccessary.com/en/news/india-ai-data-center-water-crisis" },
-  { stat: "India e-waste generated FY2024–25", value: "~1.4 million tonnes", attribution: "Central Pollution Control Board (CPCB)", url: "https://www.uniindia.com/~/over-13-97-lakh-tonnes-e-waste-generated-in-2024-25-cpcb-data/Parliament/news/3542425.html" },
-  { stat: "A single 100 MW facility's water draw", value: "~2 million litres / day", attribution: "Reccessary", url: "https://www.reccessary.com/en/news/india-ai-data-center-water-crisis" }
+  { stat: "India's operational data-centre capacity quadrupled in five years", value: "0.4 GW (2020) → ~1.5 GW (2025)", attribution: "Press Information Bureau, via Mongabay India", url: "https://india.mongabay.com/2026/05/india-bets-on-data-centres-even-as-water-energy-use-concerns-mount/", theme: "energy" },
+  { stat: "Projected capacity growth by 2030", value: "~1.4 GW → ~9 GW", attribution: "IEEFA", url: "https://ieefa.org/resources/indias-power-hungry-data-centre-sector-crossroads", theme: "energy" },
+  { stat: "Data-centre share of India's electricity", value: "~0.5% (2024) → >2× by 2030", attribution: "CEEW with SYSTEMIQ", url: "https://www.ceew.in/publications/how-is-data-centre-infrastructure-in-india-shaping-power-and-water-use", theme: "energy" },
+  { stat: "Longer-run electricity share", value: "<1% now → ~3% by 2030", attribution: "IEEFA", url: "https://ieefa.org/resources/indias-power-hungry-data-centre-sector-crossroads", theme: "energy" },
+  { stat: "Annual data-centre water consumption", value: "~150 → 358 billion litres by 2030", attribution: "Mordor Intelligence, via Reccessary (CEEW corroborates baseline)", url: "https://www.reccessary.com/en/news/india-ai-data-center-water-crisis", theme: "water" },
+  { stat: "Share of data centres in water-stressed regions", value: ">50%", attribution: "WRI India mapping, via Mongabay India", url: "https://india.mongabay.com/2026/05/india-bets-on-data-centres-even-as-water-energy-use-concerns-mount/", theme: "water" },
+  { stat: "New builds since 2022 sited in water-stressed regions", value: "~2 in 3", attribution: "Bloomberg, via Reccessary", url: "https://www.reccessary.com/en/news/india-ai-data-center-water-crisis", theme: "water" },
+  { stat: "Data-centre investment commitments 2019–2025", value: "~USD 94 billion", attribution: "Cushman & Wakefield", url: "https://www.cushmanwakefield.com/en/india/insights/india-data-centre-update", theme: "policy" },
+  { stat: "Typical India PUE / WUE ranges", value: "PUE 1.0–2.0 · WUE 0–2.5 L/kWh", attribution: "CEEW, via Mongabay India", url: "https://india.mongabay.com/2026/05/india-bets-on-data-centres-even-as-water-energy-use-concerns-mount/", theme: "energy" },
+  { stat: "State DC policies with any sustainability parameters", value: "5 of 15", attribution: "CEEW, via Reccessary", url: "https://www.reccessary.com/en/news/india-ai-data-center-water-crisis", theme: "policy" },
+  { stat: "India e-waste generated FY2024–25", value: "~1.4 million tonnes", attribution: "Central Pollution Control Board (CPCB)", url: "https://www.uniindia.com/~/over-13-97-lakh-tonnes-e-waste-generated-in-2024-25-cpcb-data/Parliament/news/3542425.html", theme: "all" },
+  { stat: "A single 100 MW facility's water draw", value: "~2 million litres / day", attribution: "Reccessary", url: "https://www.reccessary.com/en/news/india-ai-data-center-water-crisis", theme: "water" }
 ];
 
 window.IMPACT_STORIES = [
