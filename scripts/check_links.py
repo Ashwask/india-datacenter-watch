@@ -111,12 +111,17 @@ def check(url: str, timeout: int) -> tuple[str, int | str]:
                     resp.read(1)
                     return ("TLS", resp.status)
             except urllib.error.HTTPError as e2:
-                return ("TLS" if e2.code in (401, 403, 405, 429, 503) else "DEAD", e2.code)
+                if e2.code in (404, 410):
+                    return ("DEAD", e2.code)
+                return ("TLS" if e2.code in (401, 403, 405, 429, 503) else "TLS", e2.code)
             except Exception:  # noqa: BLE001
-                return ("DEAD", "tls+unreachable")
+                return ("ERROR", "tls+unreachable")
+        # DNS / connection / timeout failures are transient and environment-specific
+        # (CI runners get blocked or hit flaky DNS), so they warn rather than fail.
+        # Only a definitive HTTP 404/410 above marks a source DEAD.
         if "timed out" in s or "timeout" in s:
             return ("ERROR", "timeout")
-        return ("DEAD", str(reason)[:60])
+        return ("ERROR", str(reason)[:60])
     except Exception as e:  # noqa: BLE001
         return ("ERROR", str(e)[:60])
 
