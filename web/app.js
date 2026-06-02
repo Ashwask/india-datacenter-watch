@@ -138,7 +138,24 @@
       var a = e.target.closest && e.target.closest("a[data-tab], a[href^='#']");
       if (!a) return;
       var tab = a.getAttribute("data-tab") || idToTab[(a.getAttribute("href") || "").slice(1)];
-      if (tab) { e.preventDefault(); showTab(tab); }
+      if (tab) {
+        e.preventDefault();
+        showTab(tab);
+        if (e.detail > 0 && a.blur) a.blur(); // mouse click: don't leave a stuck focus ring
+      }
+    });
+    // Logo → home (the Map tab / landing view).
+    var logo = document.getElementById("logo-home");
+    if (logo) logo.addEventListener("click", function (e) {
+      showTab("map");
+      if (e.detail > 0 && logo.blur) logo.blur();
+    });
+    // After any pointer activation of a button-like control, drop focus so the
+    // outline/highlight doesn't linger.
+    document.addEventListener("click", function (e) {
+      if (e.detail <= 0) return; // keyboard activation keeps focus for a11y
+      var b = e.target.closest && e.target.closest('[role="button"]');
+      if (b && b.blur) b.blur();
     });
     // Activate any role="button" element with Enter / Space.
     document.addEventListener("keydown", function (e) {
