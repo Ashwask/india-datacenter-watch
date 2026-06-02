@@ -58,7 +58,7 @@
     impact: ["concerns", "statistics", "impact"],
     action: ["response"],
     photos: ["photos"],
-    about: ["about", "faq", "news"],
+    about: ["about", "news", "faq"],
     report: ["report"]
   };
   function showTab(name) {
