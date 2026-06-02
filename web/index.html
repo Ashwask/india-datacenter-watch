@@ -170,6 +170,16 @@
   footer .links{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
   footer .links a{cursor:pointer}
 
+  /* collapsible blocks */
+  details.collapse{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);overflow:hidden;margin-top:4px}
+  details.collapse>summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:600;color:var(--ink);font-size:13.5px}
+  details.collapse>summary::-webkit-details-marker{display:none}
+  details.collapse>summary::before{content:"▸ ";color:var(--accent)}
+  details.collapse[open]>summary::before{content:"▾ "}
+  details.collapse>summary:hover{color:var(--accent)}
+  details.collapse .tablewrap{border:none;border-radius:0}
+  details.collapse .inner{padding:0 16px 16px}
+
   /* directory table */
   .tablewrap{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--panel)}
   .tablescroll{overflow-x:auto;max-height:70vh;overflow-y:auto}
@@ -290,19 +300,22 @@
   </p>
   <p><button class="btn-inline" id="dl-csv">⬇ Download CSV (filtered)</button>
      <button class="btn-inline" id="dl-csv-all" style="background:transparent;color:var(--ink);border:1px solid var(--line)">⬇ Download full dataset</button></p>
-  <div class="tablewrap">
-    <div class="tablescroll">
-      <table class="dir">
-        <thead>
-          <tr>
-            <th>Facility</th><th>Operator</th><th>City</th><th>State</th>
-            <th>Status</th><th>IT&nbsp;load</th><th>Water&nbsp;stress</th><th>Source</th>
-          </tr>
-        </thead>
-        <tbody id="dir-body"></tbody>
-      </table>
+  <details class="collapse" id="dir-collapse">
+    <summary>Show / hide the full facility table with sources</summary>
+    <div class="tablewrap">
+      <div class="tablescroll">
+        <table class="dir">
+          <thead>
+            <tr>
+              <th>Facility</th><th>Operator</th><th>City</th><th>State</th>
+              <th>Status</th><th>IT&nbsp;load</th><th>Water&nbsp;stress</th><th>Source</th>
+            </tr>
+          </thead>
+          <tbody id="dir-body"></tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  </details>
 </section>
 
 <div class="content" style="padding-top:0"><div class="divider"></div></div>
@@ -471,13 +484,32 @@
   reporting. Facility coordinates are placed at city/cluster level where exact siting is not public, and IT-load
   figures are shown only where reported. Smaller, captive, edge, and unannounced facilities may still be missing.
   Corrections welcome — file a report above.</p>
-  <p><b>Sources include:</b>
-    <a href="https://en.wikipedia.org/wiki/Data_centre_industry_in_India">Wikipedia</a> ·
-    <a href="https://www.datacentermap.com/india/">datacentermap</a> ·
-    <a href="https://www.datacenterdynamics.com/">DatacenterDynamics</a> ·
-    <a href="https://india.mongabay.com/2026/05/india-bets-on-data-centres-even-as-water-energy-use-concerns-mount/">Mongabay India</a> ·
-    <a href="https://earthjournalism.net/stories/indias-data-centers-drain-water-stressed-regions">Earth Journalism Network</a>.
-    Inspired by the <a href="https://brockovichdatacenter.com/">Brockovich Data Center map</a>.</p>
+  <details class="collapse" style="margin:14px 0">
+    <summary>Sources &amp; credits</summary>
+    <div class="inner" style="color:var(--faint);font-size:12.5px;padding-top:10px">
+      <p style="margin:0 0 8px"><b>Facility dataset:</b>
+        <a href="https://en.wikipedia.org/wiki/Data_centre_industry_in_India">Wikipedia</a> ·
+        <a href="https://www.datacentermap.com/india/">datacentermap</a> ·
+        <a href="https://baxtel.com/">baxtel</a> ·
+        <a href="https://www.datacenterdynamics.com/">DatacenterDynamics</a> ·
+        <a href="https://www.cushmanwakefield.com/en/india/insights/india-data-centre-update">Cushman &amp; Wakefield</a> ·
+        operator websites and company press releases (linked per row in the table above).</p>
+      <p style="margin:0 0 8px"><b>Community impact &amp; statistics:</b>
+        <a href="https://india.mongabay.com/2026/05/india-bets-on-data-centres-even-as-water-energy-use-concerns-mount/">Mongabay India</a> ·
+        <a href="https://www.downtoearth.org.in/">Down To Earth</a> ·
+        <a href="https://restofworld.org/">Rest of World</a> ·
+        <a href="https://www.thenewsminute.com/">The News Minute</a> ·
+        <a href="https://www.newslaundry.com/">Newslaundry</a> ·
+        <a href="https://www.landconflictwatch.org/">Land Conflict Watch</a> ·
+        <a href="https://science.thewire.in/">The Wire Science</a> ·
+        <a href="https://earthjournalism.net/">Earth Journalism Network</a> ·
+        <a href="https://ieefa.org/">IEEFA</a> ·
+        <a href="https://www.ceew.in/">CEEW</a> · WRI India · CPCB (each item linked individually in Community Impact).</p>
+      <p style="margin:0"><b>Scope:</b> every facility, statistic, and report on this site is India-specific.
+        Impact estimates use India's grid emission factor (CEA, 0.71&nbsp;tCO₂/MWh) and India-average PUE/WUE
+        ranges (CEEW). Inspired by the <a href="https://brockovichdatacenter.com/">Brockovich Data Center map</a>.</p>
+    </div>
+  </details>
   <div class="links">
     <a data-modal="terms">Terms of Service</a><a data-modal="privacy">Privacy Policy</a>
     <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT License</a>
