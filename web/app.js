@@ -85,8 +85,41 @@
   }
 
   function render() {
+    var rows = currentFilter();
     layer.clearLayers();
-    currentFilter().forEach(function (d) { marker(d).addTo(layer); });
+    rows.forEach(function (d) { marker(d).addTo(layer); });
+    buildTable(rows);
+  }
+
+  // ---- directory table with a Source column ----
+  function sourceHost(url) {
+    try { return url.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]; }
+    catch (e) { return "source"; }
+  }
+  function buildTable(rows) {
+    var body = document.getElementById("dir-body");
+    if (!body) return;
+    var sorted = rows.slice().sort(function (a, b) {
+      return a.operator.localeCompare(b.operator) || a.name.localeCompare(b.name);
+    });
+    body.innerHTML = sorted.map(function (d) {
+      var st = (STATUS[d.status] || { label: d.status }).label;
+      var src = d.source
+        ? '<a class="srclink" href="' + esc(d.source) + '" target="_blank" rel="noopener">' + esc(sourceHost(d.source)) + " ↗</a>"
+        : '<span class="small">—</span>';
+      return "<tr>" +
+        '<td class="fac">' + esc(d.name) + "</td>" +
+        '<td class="op">' + esc(d.operator) + "</td>" +
+        "<td>" + esc(d.city) + "</td>" +
+        "<td>" + esc(d.state) + "</td>" +
+        '<td><span class="sb ' + d.status + '">' + esc(st) + "</span></td>" +
+        "<td>" + (d.it_load_mw != null ? d.it_load_mw + " MW" : "—") + "</td>" +
+        '<td class="water">' + (d.water_stressed ? "💧" : "") + "</td>" +
+        "<td>" + src + "</td>" +
+      "</tr>";
+    }).join("");
+    var c = document.getElementById("dir-count");
+    if (c) c.textContent = sorted.length;
   }
 
   // ---- header stats ----
@@ -302,6 +335,7 @@
       document.getElementById("f-water").checked = false;
       render();
     });
+    var tot = document.getElementById("dir-total"); if (tot) tot.textContent = DATA.length;
     buildHeaderStats(); buildBigStats(); buildStateBars();
     buildLegend(); buildStateSelect(); wireReport(); wireModals(); wireScrollSpy(); render();
     // Leaflet measures the container on init; if layout settles a tick later

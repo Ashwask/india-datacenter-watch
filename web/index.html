@@ -146,6 +146,22 @@
   footer .links{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
   footer .links a{cursor:pointer}
 
+  /* directory table */
+  .tablewrap{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--panel)}
+  .tablescroll{overflow-x:auto;max-height:70vh;overflow-y:auto}
+  table.dir{width:100%;border-collapse:collapse;font-size:13px}
+  table.dir th,table.dir td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.dir thead th{position:sticky;top:0;background:var(--panel-2);color:var(--muted);font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.5px;z-index:1;white-space:nowrap}
+  table.dir tbody tr:hover{background:var(--panel-2)}
+  table.dir td.fac{font-weight:600}
+  table.dir td.op{color:var(--muted)}
+  table.dir .sb{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:20px;color:#0e1116}
+  table.dir .sb.operational{background:var(--operational)} table.dir .sb.under_construction{background:var(--under)}
+  table.dir .sb.proposed{background:var(--proposed)} table.dir .sb.community_reported{background:var(--reported)}
+  table.dir a.srclink{color:var(--proposed);word-break:break-all}
+  table.dir td.water{color:var(--water);font-weight:700;text-align:center}
+
   .stat{cursor:pointer;transition:border-color .12s}
   .stat:hover{border-color:var(--accent)}
   .stat.active{border-color:var(--accent);background:var(--panel-2)}
@@ -174,6 +190,7 @@
   <a href="#impact">Community Impact</a>
   <a href="#concerns">Key Concerns</a>
   <a href="#map">Map</a>
+  <a href="#directory">Sources</a>
   <a href="#news">Latest News</a>
   <a class="report-cta" href="#report">Report an Issue</a>
 </nav>
@@ -218,6 +235,31 @@
   </aside>
   <div id="map"></div>
 </div>
+
+<!-- FACILITY DIRECTORY + SOURCES -->
+<section class="content" id="directory">
+  <h2 class="big">Facility directory &amp; sources</h2>
+  <p class="lede">
+    Every facility on the map, with a <b>Source</b> column citing where each row comes from. This table
+    mirrors the map filters above — filter by status, state, operator, or water-stress and the list narrows
+    with it. Showing <b id="dir-count">0</b> of <b id="dir-total">0</b> facilities.
+  </p>
+  <div class="tablewrap">
+    <div class="tablescroll">
+      <table class="dir">
+        <thead>
+          <tr>
+            <th>Facility</th><th>Operator</th><th>City</th><th>State</th>
+            <th>Status</th><th>IT&nbsp;load</th><th>Water&nbsp;stress</th><th>Source</th>
+          </tr>
+        </thead>
+        <tbody id="dir-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="content" style="padding-top:0"><div class="divider"></div></div>
 
 <!-- KEY CONCERNS -->
 <section class="content" id="concerns">
