@@ -1,0 +1,19 @@
+name = "india-dc-watch-api"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# Report records (one KV entry per submission).
+# Create with:  wrangler kv namespace create REPORTS
+# then paste the returned id below.
+[[kv_namespaces]]
+binding = "REPORTS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# Uploaded photos.
+# Create with:  wrangler r2 bucket create india-dc-watch-photos
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "india-dc-watch-photos"
+
+# ADMIN_TOKEN is a secret, not a var. Set it with:
+#   wrangler secret put ADMIN_TOKEN

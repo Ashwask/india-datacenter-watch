@@ -31,8 +31,9 @@ datacenters/
     └── overview.md
 ```
 
-The dataset currently tracks **187 facilities** across **45 operators**, **30 cities**, and
-**18 states/UTs** — from hyperscale campuses to edge and GPU/AI sites. Every row carries a source.
+The dataset currently tracks **191 facilities** across **46 operators**, **31 cities**, and
+**18 states/UTs** — from hyperscale campuses to edge and GPU/AI sites, including 4 sourced
+community-reported entries. Every row carries a source.
 
 The site is fully data-driven (Leaflet + Chart.js):
 
@@ -41,8 +42,13 @@ The site is fully data-driven (Leaflet + Chart.js):
   calculations** (energy, CO₂, water, e-waste, homes-equivalent) and **trend graphs** specific to that
   concern. Estimates are derived transparently from disclosed IT load (PUE 1.6, water 1.8 L/kWh, grid
   0.71 tCO₂/MWh) and labelled as estimates.
-- **Sources** — full facility directory table with a Source column, plus **Download CSV** (filtered or
-  full dataset).
+- **Sources** — full facility directory table with a Source column (collapsible), plus **Download CSV**
+  (filtered or full dataset).
+- **About / Photos / Report** — an About section, a community Photos gallery, and a report form with photo
+  upload. With the optional Cloudflare Worker backend (`/worker`) deployed and its URL set in
+  `web/config.js`, the form submits live, photos upload, and **approved** reports appear as
+  community-reported map pins and in the gallery. Without it, the form falls back to email / JSON download.
+- **Terms / Privacy** — standalone `terms.html` / `privacy.html` pages.
 
 ## Run the map (no server needed)
 

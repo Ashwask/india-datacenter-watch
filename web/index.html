@@ -157,6 +157,26 @@
   form.report{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:760px}
   form.report .full{grid-column:1/-1}
   form.report textarea{min-height:90px;resize:vertical}
+  form.report input[type=file]{width:100%;background:var(--panel-2);border:1px dashed var(--line);color:var(--muted);
+    border-radius:9px;padding:14px;font-size:13px;cursor:pointer}
+  .submit-ok{background:rgba(46,160,67,.12);border:1px solid rgba(46,160,67,.4);color:#7ee787}
+  .submit-err{background:rgba(229,83,75,.12);border:1px solid rgba(229,83,75,.4);color:#ffa198}
+
+  /* photos gallery */
+  .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:8px}
+  .photo-grid figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .photo-grid img{width:100%;height:150px;object-fit:cover;display:block}
+  .photo-grid figcaption{padding:9px 11px;font-size:12px;color:var(--muted)}
+  .photo-empty{background:var(--panel);border:1px dashed var(--line);border-radius:var(--radius);
+    padding:34px 22px;text-align:center;color:var(--muted);font-size:14px}
+  .photo-empty a{color:var(--accent)}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:8px}
+  .about-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .about-card h3{margin:0 0 7px;font-size:15px}
+  .about-card p{margin:0;color:var(--muted);font-size:13.5px}
+  .about-card a{color:var(--proposed)}
   .radios{display:flex;gap:18px;font-size:13.5px;color:var(--ink)}
   .radios label{display:flex;align-items:center;gap:7px;cursor:pointer}
   .radios input{accent-color:var(--accent)}
@@ -240,7 +260,9 @@
   <a href="#concerns">Key Concerns</a>
   <a href="#map">Map</a>
   <a href="#directory">Sources</a>
+  <a href="#photos">Photos</a>
   <a href="#news">Latest News</a>
+  <a href="#about">About</a>
   <a class="report-cta" href="#report">Report an Issue</a>
 </nav>
 
@@ -417,6 +439,34 @@
 
 <div class="content" style="padding-top:0"><div class="divider"></div></div>
 
+<!-- ABOUT -->
+<section class="content" id="about" style="padding-top:0">
+  <h2 class="big">About</h2>
+  <p class="lede">India Datacenter Watch is an open, community-accountability project mapping every data center
+    we can find across India — and the energy, water, land, and community costs of the buildout.</p>
+  <div class="about-grid">
+    <div class="about-card"><h3>Why this exists</h3>
+      <p>Capacity is growing faster than public scrutiny of its resource use. Operators rarely disclose
+      facility-level water and power figures, leaving communities to estimate the impact. This project puts
+      the facilities, the numbers, and the reporting in one public place.</p></div>
+    <div class="about-card"><h3>How it's built</h3>
+      <p>A sourced open dataset — one row per facility, every row cited — drives the map, live statistics, and
+      transparent impact estimates. Coordinates fall back to city/cluster centroids where exact siting isn't
+      public, and that's noted on each marker.</p></div>
+    <div class="about-card"><h3>How you can help</h3>
+      <p>Spot a facility we're missing, or seeing local impact? <a href="#report">File a community report</a>
+      with photos. We review every submission before it appears on the map as community-reported, and promote
+      verified facilities into the dataset.</p></div>
+    <div class="about-card"><h3>Who made it</h3>
+      <p>Built by <a href="https://www.thestudioikigai.com/" target="_blank" rel="noopener">Studio Ikigai</a>,
+      open source under the MIT License. Code and data on
+      <a href="https://github.com/Ashwask/india-datacenter-watch" target="_blank" rel="noopener">GitHub</a>.
+      Inspired by the <a href="https://brockovichdatacenter.com/" target="_blank" rel="noopener">Brockovich Data Center map</a>.</p></div>
+  </div>
+</section>
+
+<div class="content" style="padding-top:0"><div class="divider"></div></div>
+
 <!-- FAQ -->
 <section class="content" id="faq" style="padding-top:0">
   <h2 class="big">FAQ</h2>
@@ -440,13 +490,22 @@
 
 <div class="content" style="padding-top:0"><div class="divider"></div></div>
 
+<!-- PHOTOS -->
+<section class="content" id="photos" style="padding-top:0">
+  <h2 class="big">Photos</h2>
+  <p class="lede">Photos from the ground, submitted by residents and reviewed before publishing. Have one?
+    Attach it when you <a href="#report">report a facility</a> below.</p>
+  <div class="photo-grid" id="photo-grid"></div>
+</section>
+
+<div class="content" style="padding-top:0"><div class="divider"></div></div>
+
 <!-- REPORT -->
 <section class="content" id="report" style="padding-top:0">
   <h2 class="big">Report an Issue</h2>
-  <p class="lede">
-    Add a facility we're missing, or document local impact you're witnessing. This static site has no server,
-    so your report is packaged locally — email it to us or download it to attach to a GitHub issue. We review
-    every submission before it goes on the map as <b>community-reported</b>.
+  <p class="lede" id="report-intro">
+    Add a facility we're missing, or document local impact you're witnessing — with photos. We review every
+    submission before it appears on the map as <b>community-reported</b>.
   </p>
   <form class="report" id="reportForm" onsubmit="return false;">
     <div class="field"><label>Name</label><input type="text" id="r-contact" /></div>
@@ -454,21 +513,25 @@
     <div class="field"><label>Address</label><input type="text" id="r-address" /></div>
     <div class="field"><label>Email</label><input type="email" id="r-email-addr" /></div>
     <div class="field full"><label>Data center location you are reporting (name, city, state)</label><input type="text" id="r-location" /></div>
-    <div class="field full"><label>Do you know who owns / operates this center?</label><input type="text" id="r-operator" /></div>
+    <div class="field"><label>Do you know who owns / operates this center?</label><input type="text" id="r-operator" /></div>
+    <div class="field"><label>Approx. coordinates (lat, lng) — optional, helps map it</label><input type="text" id="r-coords" placeholder="17.82, 83.37" /></div>
     <div class="field full"><label>Operational status</label>
       <div class="radios">
-        <label><input type="radio" name="r-status" value="operational" checked /> Already running</label>
+        <label><input type="radio" name="r-status" value="operational" /> Already running</label>
         <label><input type="radio" name="r-status" value="under_construction" /> Under construction</label>
         <label><input type="radio" name="r-status" value="proposed" /> Proposed</label>
+        <label><input type="radio" name="r-status" value="community_reported" checked /> Just reporting an issue</label>
       </div>
     </div>
     <div class="field full"><label>Issue you have witnessed (water, power, noise, land, e-waste…)</label><textarea id="r-notes"></textarea></div>
-    <div class="field full"><label>Other areas to address (sources, links, coordinates)</label><textarea id="r-other"></textarea></div>
-    <div class="full note-box">📷 Photo uploads aren't supported on this static demo — please mention photos in your report and attach them to the email or GitHub issue (max 5, JPG/PNG, 10&nbsp;MB each).</div>
-    <label class="toggle full"><input type="checkbox" id="r-agree" /> I agree my report may be reviewed and, if verified, shown publicly on the map.</label>
+    <div class="field full"><label>Other areas to address (sources, links)</label><textarea id="r-other"></textarea></div>
+    <div class="field full"><label>Photos (optional, up to 5 — JPG/PNG/HEIC, 10&nbsp;MB each)</label>
+      <input type="file" id="r-photos" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple /></div>
+    <label class="toggle full"><input type="checkbox" id="r-agree" /> I agree my report may be reviewed and, if verified, shown publicly on the map. (See <a href="terms.html" target="_blank">Terms</a> &amp; <a href="privacy.html" target="_blank">Privacy</a>.)</label>
     <div class="full" style="display:flex;gap:12px;flex-wrap:wrap">
-      <button class="btn" style="max-width:220px" id="r-email">Email this report</button>
-      <button class="btn ghost" style="max-width:220px" id="r-download">Download as JSON</button>
+      <button class="btn" style="max-width:200px" id="r-submit">Submit report</button>
+      <button class="btn ghost" style="max-width:170px" id="r-email">Email instead</button>
+      <button class="btn ghost" style="max-width:170px" id="r-download">Download JSON</button>
     </div>
     <div class="full note-box" id="r-status-msg" style="display:none"></div>
   </form>
@@ -506,7 +569,7 @@
     </div>
   </details>
   <div class="links">
-    <a data-modal="terms">Terms of Service</a><a data-modal="privacy">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a>
     <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT License</a>
   </div>
   <p style="margin-top:14px">
@@ -516,40 +579,11 @@
   </p>
 </footer>
 
-<!-- Terms / Privacy modals -->
-<div class="modal-overlay" id="modal-terms">
-  <div class="modal">
-    <button class="x" data-close>×</button>
-    <h3>Terms of Service</h3>
-    <p>India Datacenter Watch is a free, open-source, informational project. The dataset is compiled on a
-    best-effort basis from public sources and is provided "as is", without warranty of accuracy or
-    completeness. Facility locations, statuses, and capacities may be approximate or out of date.</p>
-    <p>Nothing here is legal, investment, or professional advice. Do not rely on it for siting, compliance,
-    or commercial decisions without independent verification. By submitting a community report you confirm
-    the information is true to the best of your knowledge and may be reviewed and, if verified, published.</p>
-    <p>Code is licensed under the <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT
-    License</a>; data under CC BY 4.0. Built by
-    <a href="https://www.thestudioikigai.com/" target="_blank" rel="noopener">Studio Ikigai</a>.</p>
-  </div>
-</div>
-<div class="modal-overlay" id="modal-privacy">
-  <div class="modal">
-    <button class="x" data-close>×</button>
-    <h3>Privacy Policy</h3>
-    <p>This is a static site. It sets no tracking cookies and runs no analytics or advertising scripts.
-    Map tiles are served by OpenStreetMap/CARTO and Leaflet assets by a public CDN; loading them exposes
-    your IP address to those providers, as with any website.</p>
-    <p>The report form does <b>not</b> transmit anything automatically. When you click "Email this report"
-    your own email client opens with the details pre-filled; "Download as JSON" saves the report to your
-    device. We only receive a report if you choose to send it. We use any contact details you include
-    solely to follow up on your submission.</p>
-  </div>
-</div>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
   integrity="sha256-0q+JdOlScWOHcunpUk21uab1jW7C1deBQARHtKMcaB4=" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="config.js"></script>
 <script src="data.js"></script>
 <script src="impact_data.js"></script>
 <script src="app.js"></script>

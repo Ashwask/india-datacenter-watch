@@ -4,6 +4,7 @@
   "use strict";
 
   var DATA = (window.DATACENTERS || []).slice();
+  var API_BASE = (window.DC_WATCH_API || "").replace(/\/+$/, "");
 
   var STATUS = {
     operational:        { cls: "operational", label: "Operational" },
@@ -309,12 +310,53 @@
       agreed: document.getElementById("r-agree").checked
     };
   }
-  function msg(t) { var m = document.getElementById("r-status-msg"); m.style.display = "block"; m.textContent = t; }
+  function msg(t, kind) {
+    var m = document.getElementById("r-status-msg");
+    m.style.display = "block"; m.textContent = t;
+    m.className = "full note-box" + (kind === "ok" ? " submit-ok" : kind === "err" ? " submit-err" : "");
+  }
+  function reportCoords() {
+    var parts = (val("r-coords") || "").split(",");
+    if (parts.length !== 2) return null;
+    var lat = parseFloat(parts[0]), lng = parseFloat(parts[1]);
+    return isFinite(lat) && isFinite(lng) ? { lat: lat, lng: lng } : null;
+  }
+
+  async function submitToWorker() {
+    var r = gatherReport();
+    if (!r.agreed) { msg("Please tick the agreement box first.", "err"); return; }
+    if (!r.location) { msg("Please enter the data center location you're reporting.", "err"); return; }
+    if (!API_BASE) {
+      msg('Live submission isn’t enabled on this deployment yet. Use "Email instead" or "Download JSON" below — or set up the Cloudflare Worker (see /worker).', "err");
+      return;
+    }
+    var fd = new FormData();
+    Object.keys(r).forEach(function (k) { fd.append(k, r[k]); });
+    var c = reportCoords();
+    if (c) { fd.append("latitude", c.lat); fd.append("longitude", c.lng); }
+    var files = document.getElementById("r-photos").files;
+    for (var i = 0; i < Math.min(files.length, 5); i++) fd.append("photos", files[i]);
+    msg("Submitting…");
+    try {
+      var res = await fetch(API_BASE + "/report", { method: "POST", body: fd });
+      var data = await res.json().catch(function () { return {}; });
+      if (res.ok && data.ok) {
+        msg("Thank you — your report was submitted (ref " + String(data.id || "").slice(0, 8) +
+          "). We review every submission before it appears on the map.", "ok");
+        document.getElementById("reportForm").reset();
+      } else {
+        msg("Submission failed: " + (data.error || ("HTTP " + res.status)) + ". Please use Email or Download instead.", "err");
+      }
+    } catch (e) {
+      msg("Couldn’t reach the server. Please use “Email instead” or “Download JSON”.", "err");
+    }
+  }
 
   function wireReport() {
+    document.getElementById("r-submit").addEventListener("click", submitToWorker);
     document.getElementById("r-email").addEventListener("click", function () {
       var r = gatherReport();
-      if (!r.agreed) { msg("Please tick the agreement box before submitting."); return; }
+      if (!r.agreed) { msg("Please tick the agreement box before submitting.", "err"); return; }
       var body = "New community report for India Datacenter Watch%0D%0A%0D%0A" +
         Object.keys(r).map(function (k) { return k + ": " + encodeURIComponent(r[k]); }).join("%0D%0A");
       window.location.href = "mailto:reports@example.org?subject=" +
@@ -327,8 +369,44 @@
       a.href = URL.createObjectURL(blob);
       a.download = "dc-report-" + (r.location || "facility").toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40) + ".json";
       a.click();
-      msg("Report downloaded. Attach it to a GitHub issue, or email it to us — thank you.");
+      msg("Report downloaded. Attach it to a GitHub issue, or email it to us — thank you.", "ok");
     });
+  }
+
+  // ---- Photos gallery + live community-report pins (from the Worker) ----
+  function buildPhotos() {
+    var grid = document.getElementById("photo-grid"); if (!grid) return;
+    function empty() {
+      grid.innerHTML = '<div class="photo-empty">No community photos yet. Be the first — attach photos when you ' +
+        '<a href="#report">report a facility</a>.</div>';
+    }
+    if (!API_BASE) { empty(); return; }
+    fetch(API_BASE + "/photos").then(function (r) { return r.json(); }).then(function (list) {
+      if (!Array.isArray(list) || !list.length) { empty(); return; }
+      grid.innerHTML = list.map(function (p) {
+        return '<figure><img loading="lazy" alt="Community-submitted photo" src="' + esc(API_BASE + p.url) + '">' +
+          '<figcaption>' + esc(p.location || "Community report") + "</figcaption></figure>";
+      }).join("");
+    }).catch(empty);
+  }
+
+  function loadLiveReports() {
+    if (!API_BASE) return;
+    fetch(API_BASE + "/reports").then(function (r) { return r.json(); }).then(function (list) {
+      if (!Array.isArray(list) || !list.length) return;
+      list.forEach(function (r) {
+        var lat = parseFloat(r.latitude), lng = parseFloat(r.longitude);
+        if (!isFinite(lat) || !isFinite(lng)) return;
+        DATA.push({
+          id: r.id || ("live-" + lat + "-" + lng), name: r.name || "Community report",
+          operator: r.operator || "Community-reported", city: r.name || "", state: "Community report",
+          latitude: lat, longitude: lng, status: "community_reported",
+          it_load_mw: null, commissioned_year: null, water_stressed: null,
+          notes: r.notes || null, source: null
+        });
+      });
+      buildLegend(); render(); // refresh community_reported count + pins
+    }).catch(function () {});
   }
 
   // ========================================================================
@@ -724,6 +802,7 @@
     initChartDefaults();
     buildHeaderStats(); buildBigStats(); buildStatsCharts(); buildStateChart();
     setLiveFigures(); wireConcerns(); wireDownloads(); buildImpact();
+    buildPhotos(); loadLiveReports();
     buildLegend(); buildStateSelect(); wireReport(); wireModals(); wireScrollSpy(); render();
     // Leaflet measures the container on init; if layout settles a tick later
     // (fonts, grid sizing), recalc so tiles fill the map instead of staying blank.
