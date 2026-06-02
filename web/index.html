@@ -115,12 +115,6 @@
   .bigstat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
   .bigstat .n{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1}
   .bigstat .l{color:var(--muted);font-size:13px;margin-top:6px}
-  .topstates{margin-top:22px}
-  .bar-row{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px}
-  .bar-row .name{width:130px;color:var(--muted)}
-  .bar-row .track{flex:1;background:var(--panel-2);border-radius:6px;height:14px;overflow:hidden}
-  .bar-row .fill{height:100%;background:var(--accent)}
-  .bar-row .v{width:34px;text-align:right;color:var(--faint);font-variant-numeric:tabular-nums}
 
   .impact{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media (max-width:760px){.impact{grid-template-columns:1fr}.report{grid-template-columns:1fr !important}}
@@ -222,8 +216,6 @@
   .stat{cursor:pointer;transition:border-color .12s}
   .stat:hover{border-color:var(--accent)}
   .stat.active{border-color:var(--accent);background:var(--panel-2)}
-  .bar-row{cursor:pointer}
-  .bar-row:hover .name{color:var(--ink)}
   nav.top a.active{color:var(--ink)}
 
   /* modal */
@@ -381,9 +373,9 @@
     <div class="chart-card"><h3>Growth — cumulative facilities by year</h3><div class="holder"><canvas id="ch-trend"></canvas></div></div>
     <div class="chart-card"><h3>Disclosed IT load by state (MW)</h3><div class="holder"><canvas id="ch-statemw"></canvas></div></div>
   </div>
-  <div class="topstates">
-    <h3 style="font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Facilities by state — click to filter the map</h3>
-    <div id="statebars"></div>
+  <div class="chart-card" style="margin-top:14px">
+    <h3>Facilities by state — click a bar to filter the map</h3>
+    <div class="holder" style="height:440px"><canvas id="ch-statecount"></canvas></div>
   </div>
 </section>
 

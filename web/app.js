@@ -192,26 +192,33 @@
     }).join("");
   }
 
-  function buildStateBars() {
+  function filterByState(state) {
+    document.getElementById("f-state").value = state;
+    Object.keys(enabled).forEach(function (k) { enabled[k] = true; });
+    document.getElementById("f-water").checked = false;
+    syncLegend(); render(); scrollToMap();
+  }
+
+  function buildStateChart() {
+    if (!chartsReady()) return;
     var byState = {};
     DATA.forEach(function (d) { byState[d.state] = (byState[d.state] || 0) + 1; });
     var sorted = Object.keys(byState).map(function (k) { return [k, byState[k]]; })
       .sort(function (a, b) { return b[1] - a[1]; });
-    var max = sorted.length ? sorted[0][1] : 1;
-    document.getElementById("statebars").innerHTML = sorted.map(function (kv) {
-      var pct = Math.round((kv[1] / max) * 100);
-      return '<div class="bar-row" data-state="' + esc(kv[0]) + '" title="Show on map">' +
-        '<span class="name">' + esc(kv[0]) + '</span>' +
-        '<span class="track"><span class="fill" style="width:' + pct + '%"></span></span>' +
-        '<span class="v">' + kv[1] + "</span></div>";
-    }).join("");
-    Array.prototype.forEach.call(document.querySelectorAll(".bar-row[data-state]"), function (el) {
-      el.addEventListener("click", function () {
-        document.getElementById("f-state").value = el.getAttribute("data-state");
-        Object.keys(enabled).forEach(function (k) { enabled[k] = true; });
-        document.getElementById("f-water").checked = false;
-        syncLegend(); render(); scrollToMap();
-      });
+    mk("ch-statecount", {
+      type: "bar",
+      data: { labels: sorted.map(function (e) { return e[0]; }),
+        datasets: [{ data: sorted.map(function (e) { return e[1]; }),
+          backgroundColor: "#f0883e", hoverBackgroundColor: "#ffa657", borderRadius: 4, maxBarThickness: 18 }] },
+      options: {
+        indexAxis: "y",
+        plugins: { legend: { display: false },
+          tooltip: { callbacks: { label: function (c) { return c.parsed.x + " facilities — click to filter the map"; } } } },
+        scales: { x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: "rgba(42,50,61,.45)" } },
+                  y: { grid: { display: false }, ticks: { autoSkip: false, font: { size: 11.5 } } } },
+        onClick: function (evt, els, chart) { if (els && els.length) filterByState(chart.data.labels[els[0].index]); },
+        onHover: function (evt, els) { if (evt.native) evt.native.target.style.cursor = els.length ? "pointer" : "default"; }
+      }
     });
   }
 
@@ -715,7 +722,7 @@
     });
     var tot = document.getElementById("dir-total"); if (tot) tot.textContent = DATA.length;
     initChartDefaults();
-    buildHeaderStats(); buildBigStats(); buildStateBars(); buildStatsCharts();
+    buildHeaderStats(); buildBigStats(); buildStatsCharts(); buildStateChart();
     setLiveFigures(); wireConcerns(); wireDownloads(); buildImpact();
     buildLegend(); buildStateSelect(); wireReport(); wireModals(); wireScrollSpy(); render();
     // Leaflet measures the container on init; if layout settles a tick later
