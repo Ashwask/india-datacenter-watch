@@ -39,8 +39,53 @@
     });
   }
   function scrollToMap() {
+    showTab("map");
     var el = document.getElementById("map-anchor");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  // ---- tabs (single-section view) ----
+  var TAB_SECTIONS = {
+    map: ["map-anchor"],
+    directory: ["directory"],
+    impact: ["concerns", "statistics", "impact"],
+    action: ["response"],
+    photos: ["photos"],
+    about: ["about", "faq", "news"],
+    report: ["report"]
+  };
+  function showTab(name) {
+    if (!TAB_SECTIONS[name]) name = "map";
+    Object.keys(TAB_SECTIONS).forEach(function (tab) {
+      TAB_SECTIONS[tab].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.display = (tab === name) ? "" : "none";
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("nav.top a[data-tab]"), function (a) {
+      a.classList.toggle("active", a.getAttribute("data-tab") === name);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (name === "map" && typeof map !== "undefined") setTimeout(function () { map.invalidateSize(); }, 60);
+    if (name === "impact") persistentCharts.forEach(function (c) { try { c.resize(); } catch (e) {} });
+  }
+  function setupTabs() {
+    // Hide the inter-section dividers (tabs separate content now).
+    Array.prototype.forEach.call(document.querySelectorAll(".divider"), function (d) {
+      var w = d.closest(".content"); if (w) w.style.display = "none";
+    });
+    // Reverse map: any in-page #anchor link jumps to the tab containing it.
+    var idToTab = {};
+    Object.keys(TAB_SECTIONS).forEach(function (tab) {
+      TAB_SECTIONS[tab].forEach(function (id) { idToTab[id] = tab; });
+    });
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a[data-tab], a[href^='#']");
+      if (!a) return;
+      var tab = a.getAttribute("data-tab") || idToTab[(a.getAttribute("href") || "").slice(1)];
+      if (tab) { e.preventDefault(); showTab(tab); }
+    });
+    showTab("map");
   }
 
   function marker(d) {
@@ -220,7 +265,7 @@
         onClick: function (evt, els, chart) { if (els && els.length) filterByState(chart.data.labels[els[0].index]); },
         onHover: function (evt, els) { if (evt.native) evt.native.target.style.cursor = els.length ? "pointer" : "default"; }
       }
-    });
+    }, persistentCharts);
   }
 
   // ---- modals (Terms / Privacy) ----
@@ -467,6 +512,7 @@
     Chart.defaults.maintainAspectRatio = false;
   }
   var concernCharts = [];
+  var persistentCharts = []; // stats/state charts — resized when their tab opens
   function destroyConcernCharts() { concernCharts.forEach(function (c) { c.destroy(); }); concernCharts = []; }
   function mk(id, cfg, store) {
     if (!chartsReady()) return null;
@@ -501,13 +547,13 @@
       ["Operational", "Under construction", "Proposed"],
       [bs.operational || 0, bs.under_construction || 0, bs.proposed || 0],
       [STATUS_COLOR.operational, STATUS_COLOR.under_construction, STATUS_COLOR.proposed]
-    ));
+    ), persistentCharts);
     var ops = topEntries(countBy(DATA, function (d) { return d.operator; }), 12);
-    mk("ch-operators", bar(ops.map(function (e) { return e[0]; }), ops.map(function (e) { return e[1]; }), { h: true, color: PAL[0] }));
+    mk("ch-operators", bar(ops.map(function (e) { return e[0]; }), ops.map(function (e) { return e[1]; }), { h: true, color: PAL[0] }), persistentCharts);
     var trend = cumulativeByYear(DATA, function () { return 1; });
-    mk("ch-trend", line(trend.labels, trend.data, PAL[5]));
+    mk("ch-trend", line(trend.labels, trend.data, PAL[5]), persistentCharts);
     var smw = topEntries(mwByKey(DATA, function (d) { return d.state; }), 12);
-    mk("ch-statemw", bar(smw.map(function (e) { return e[0]; }), smw.map(function (e) { return Math.round(e[1]); }), { h: true, color: PAL[4] }));
+    mk("ch-statemw", bar(smw.map(function (e) { return e[0]; }), smw.map(function (e) { return Math.round(e[1]); }), { h: true, color: PAL[4] }), persistentCharts);
   }
 
   // ---- live figures on concern cards ----
@@ -551,7 +597,7 @@
   var CONCERNS = {
     energy: function () {
       var disc = disclosed(), tmw = totalMW(disc), imp = impact(tmw);
-      var html = head("⚡", "Energy Consumption",
+      var html = head("⚡", "Power draw",
         "Estimated from disclosed IT load across <b>" + disc.length + " of " + DATA.length + "</b> facilities (" + nf(tmw) + " MW).") +
         cards([
           { n: nf(tmw) + " MW", l: "Disclosed IT load" },
@@ -572,7 +618,7 @@
       var ws = DATA.filter(function (d) { return d.water_stressed; });
       var pct = Math.round((ws.length / DATA.length) * 100);
       var statesAff = Object.keys(countBy(ws, function (d) { return d.state; })).length;
-      var html = head("💧", "Water Usage",
+      var html = head("💧", "Cooling water",
         "Cooling water estimated from disclosed IT load; water-stress flags follow WRI-style regional analysis.") +
         cards([
           { n: imp.waterBn.toFixed(1) + " bn L", l: "Est. cooling water / year", cls: "w" },
@@ -592,7 +638,7 @@
     ewaste: function () {
       var disc = disclosed(), tmw = totalMW(disc);
       var servers = tmw * 2000, mass = servers * 20 / 1000, turnover = mass / 4;
-      var html = head("🗑️", "E-Waste",
+      var html = head("🗑️", "Hardware waste",
         "First-order estimate from installed IT capacity. Assumes ~0.5 kW IT per server, ~20 kg/server, 4-year refresh.") +
         cards([
           { n: nf(tmw) + " MW", l: "Disclosed IT capacity" },
@@ -615,7 +661,7 @@
       var pct = Math.round((ws.length / DATA.length) * 100);
       var hubs = DATA.filter(function (d) { return /Chennai|Hyderabad|Visakhapatnam/.test(d.city) && d.water_stressed; }).length;
       var pipeStressed = ws.filter(function (d) { return d.status !== "operational"; }).length;
-      var html = head("⚠️", "Location Risks",
+      var html = head("⚠️", "Where they're sited",
         "Where facilities sit relative to water-stressed and high-exposure districts.") +
         cards([
           { n: ws.length + " / " + DATA.length, l: "In water-stressed regions", cls: "w" },
@@ -643,7 +689,7 @@
       var pipe = DATA.filter(function (d) { return d.status === "under_construction" || d.status === "proposed"; });
       var opMW = totalMW(ops), pipeMW = totalMW(pipe);
       var mult = opMW > 0 ? (1 + pipeMW / opMW).toFixed(1) + "×" : "—";
-      var html = head("📈", "Scalability &amp; Efficiency",
+      var html = head("📈", "Outpacing the grid",
         "The build pipeline relative to what is already operational — the strain ahead of the grid.") +
         cards([
           { n: ops.length, l: "Operational" },
@@ -665,7 +711,7 @@
       var top = topEntries(cities, 12);
       var topCity = top[0] || ["—", 0];
       var top5 = top.slice(0, 5).reduce(function (a, e) { return a + e[1]; }, 0);
-      var html = head("🔊", "Noise &amp; Local Impact",
+      var html = head("🔊", "Round-the-clock noise",
         "Operational facilities run cooling and backup generators 24/7. Density near communities is the exposure proxy.") +
         cards([
           { n: ops.length, l: "Operational (run 24/7)" },
@@ -861,7 +907,7 @@
     buildHeaderStats(); buildBigStats(); buildStatsCharts(); buildStateChart();
     setLiveFigures(); wireConcerns(); wireDownloads(); buildImpact(); buildResponse();
     buildPhotos(); loadLiveReports();
-    buildLegend(); buildStateSelect(); wireReport(); wireModals(); wireScrollSpy(); render();
+    buildLegend(); buildStateSelect(); wireReport(); wireModals(); render(); setupTabs();
     // Leaflet measures the container on init; if layout settles a tick later
     // (fonts, grid sizing), recalc so tiles fill the map instead of staying blank.
     setTimeout(function () { map.invalidateSize(); }, 200);

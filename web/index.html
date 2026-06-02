@@ -31,8 +31,11 @@
   }
   nav.top .logo{font-weight:800;letter-spacing:-.3px;margin-right:6px}
   nav.top a{color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:600}
+  nav.top a{cursor:pointer;padding-bottom:3px;border-bottom:2px solid transparent}
   nav.top a:hover{color:var(--ink)}
-  nav.top .report-cta{margin-left:auto;background:var(--accent);color:#1a1206;padding:7px 14px;border-radius:8px}
+  nav.top a.active{color:var(--ink);border-bottom-color:var(--accent)}
+  nav.top .report-cta{margin-left:auto;background:var(--accent);color:#1a1206;padding:7px 14px;border-radius:8px;border-bottom:none}
+  nav.top .report-cta.active{border-bottom:none}
 
   header.masthead{padding:26px 24px 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#11161d,#0e1116)}
   .initiative{display:inline-block;font-size:12px;font-weight:700;color:var(--leaf);background:rgba(63,185,80,.1);
@@ -287,17 +290,13 @@
 
 <nav class="top">
   <span class="logo">🛰️ India DC Watch</span>
-  <a href="#faq">FAQ</a>
-  <a href="#statistics">Statistics</a>
-  <a href="#impact">Community Impact</a>
-  <a href="#response">Action</a>
-  <a href="#concerns">Key Concerns</a>
-  <a href="#map">Map</a>
-  <a href="#directory">Sources</a>
-  <a href="#photos">Photos</a>
-  <a href="#news">Latest News</a>
-  <a href="#about">About</a>
-  <a class="report-cta" href="#report">Report an Issue</a>
+  <a data-tab="map">Map</a>
+  <a data-tab="directory">Directory</a>
+  <a data-tab="impact">Impact</a>
+  <a data-tab="action">Action</a>
+  <a data-tab="photos">Photos</a>
+  <a data-tab="about">About</a>
+  <a class="report-cta" data-tab="report">Report</a>
 </nav>
 
 <header class="masthead">
@@ -345,13 +344,12 @@
 <section class="content" id="directory">
   <h2 class="big">Facility directory &amp; sources</h2>
   <p class="lede">
-    Every facility on the map, with a <b>Source</b> column citing where each row comes from. This table
-    mirrors the map filters above — filter by status, state, operator, or water-stress and the list narrows
-    with it. Showing <b id="dir-count">0</b> of <b id="dir-total">0</b> facilities.
+    Every facility, with a <b>Source</b> column. Filters set on the Map tab carry over here.
+    Showing <b id="dir-count">0</b> of <b id="dir-total">0</b> facilities.
   </p>
   <p><button class="btn-inline" id="dl-csv">⬇ Download CSV (filtered)</button>
      <button class="btn-inline" id="dl-csv-all" style="background:transparent;color:var(--ink);border:1px solid var(--line)">⬇ Download full dataset</button></p>
-  <details class="collapse" id="dir-collapse">
+  <details class="collapse" id="dir-collapse" open>
     <summary>Show / hide the full facility table with sources</summary>
     <div class="tablewrap">
       <div class="tablescroll">
@@ -375,33 +373,31 @@
 <section class="content" id="concerns">
   <h2 class="big">Key concerns</h2>
   <p class="lede">
-    Data centers are critical digital infrastructure — and they draw real power, water, and land from the
-    communities around them. India's operational stock crossed <b>~1,520&nbsp;MW IT</b> in 2025 (+34% YoY)
-    and is projected to triple by 2030. These are the impacts worth watching.
+    India's operational stock crossed <b>~1,520&nbsp;MW IT</b> in 2025 (+34% YoY) and is set to triple by 2030.
+    Click any concern for the data, impact calculations, and trend graphs.
   </p>
-  <p class="lede" style="margin-top:-12px">Click any concern for the underlying data, impact calculations, and trend graphs.</p>
   <div class="concerns">
-    <div class="concern" data-concern="energy"><div class="ic">⚡</div><h3>Energy Consumption</h3>
+    <div class="concern" data-concern="energy"><div class="ic">⚡</div><h3>Power draw</h3>
       <p>Data centers are ~0.5% of India's electricity demand today, expected to reach 1–2% as the AI buildout
       accelerates — concentrated on a handful of urban grids.</p>
       <span class="more">⚡ <span class="live" data-live="energy">—</span> est. annual electricity · view data &amp; trends →</span></div>
-    <div class="concern water" data-concern="water"><div class="ic">💧</div><h3>Water Usage</h3>
+    <div class="concern water" data-concern="water"><div class="ic">💧</div><h3>Cooling water</h3>
       <p>Cooling draw is projected to rise from ~150 billion litres (2025) to ~358 billion by 2030. A WRI India
       analysis found more than half of India's data centers sit in water-stressed regions.</p>
       <span class="more">💧 <span class="live" data-live="water">—</span> est. annual cooling water · view data &amp; trends →</span></div>
-    <div class="concern" data-concern="ewaste"><div class="ic">🗑️</div><h3>E-Waste</h3>
+    <div class="concern" data-concern="ewaste"><div class="ic">🗑️</div><h3>Hardware waste</h3>
       <p>Rapid server-refresh cycles generate hardware waste. India's e-waste handling capacity lags the growth
       of compute infrastructure.</p>
       <span class="more">🗑️ <span class="live" data-live="ewaste">—</span> est. hardware turnover · view data &amp; trends →</span></div>
-    <div class="concern" data-concern="location"><div class="ic">⚠️</div><h3>Location Risks</h3>
+    <div class="concern" data-concern="location"><div class="ic">⚠️</div><h3>Where they're sited</h3>
       <p>Hyperscale campuses are rising in groundwater-stressed and coastal districts — Visakhapatnam, Chennai,
       Hyderabad — where water diversion and flooding amplify community risk.</p>
       <span class="more">⚠️ <span class="live" data-live="location">—</span> in water-stressed regions · view data &amp; trends →</span></div>
-    <div class="concern" data-concern="scalability"><div class="ic">📈</div><h3>Scalability &amp; Efficiency</h3>
+    <div class="concern" data-concern="scalability"><div class="ic">📈</div><h3>Outpacing the grid</h3>
       <p>Capacity is being announced far faster than power, water, and grid planning can absorb — straining
       infrastructure that residents also depend on.</p>
       <span class="more">📈 <span class="live" data-live="scalability">—</span> in the pipeline · view data &amp; trends →</span></div>
-    <div class="concern" data-concern="noise"><div class="ic">🔊</div><h3>Noise</h3>
+    <div class="concern" data-concern="noise"><div class="ic">🔊</div><h3>Round-the-clock noise</h3>
       <p>Continuous cooling and backup-generator operation create persistent noise and local air-quality concerns
       for nearby residents.</p>
       <span class="more">🔊 <span class="live" data-live="noise">—</span> running 24/7 · view data &amp; trends →</span></div>
@@ -521,8 +517,7 @@
     <div class="about-card"><h3>Who made it</h3>
       <p>Built by <a href="https://www.thestudioikigai.com/" target="_blank" rel="noopener">Studio Ikigai</a>,
       open source under the MIT License. Code and data on
-      <a href="https://github.com/Ashwask/india-datacenter-watch" target="_blank" rel="noopener">GitHub</a>.
-      Inspired by the <a href="https://brockovichdatacenter.com/" target="_blank" rel="noopener">Brockovich Data Center map</a>.</p></div>
+      <a href="https://github.com/Ashwask/india-datacenter-watch" target="_blank" rel="noopener">GitHub</a>.</p></div>
   </div>
 </section>
 
@@ -533,8 +528,7 @@
   <h2 class="big">FAQ</h2>
   <details class="faq"><summary>What is India Datacenter Watch?</summary>
     <p>An open, community-accountability map of data centers across India — operational, under construction,
-    proposed, and resident-reported — with a public source link for every facility. It is inspired by the
-    Brockovich Data Center map for the US.</p></details>
+    proposed, and resident-reported — with a public source link for every facility.</p></details>
   <details class="faq"><summary>Where does the data come from?</summary>
     <p>From operator websites and public reporting (e.g. datacentermap, DatacenterDynamics, company press
     releases, and news). Every facility row carries a source URL you can open from its map popup.</p></details>
