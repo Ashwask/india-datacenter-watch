@@ -82,6 +82,17 @@ Endpoints: `GET /datacenters` (filter by `state`, `city`, `operator`, `status`, 
 4. Open a PR. Community reports submitted via the website are reviewed before being added as
    `community_reported`.
 
+## Checks
+
+```bash
+python3 scripts/validate_dataset.py   # schema, unique ids, every row cited, in-bounds
+python3 scripts/check_links.py        # every cited source URL resolves; reports aggregator skew
+```
+
+CI runs both: `validate_dataset` on every push/PR, and `check_links` weekly + on PRs that touch
+the data. The link checker fails only on genuinely dead links (404/410/DNS); bot-blocked (403) and
+TLS-cert-chain (gov sites) sources are reported but don't fail the build.
+
 ## Data caveats
 
 - Coordinates are placed at city/cluster centroid where exact siting is undisclosed (e.g. cloud

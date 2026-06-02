@@ -1,0 +1,26 @@
+name: Link check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # weekly, Mondays 06:00 UTC
+  pull_request:
+    paths:
+      - "data/**"
+      - "web/impact_data.js"
+      - "web/response_data.js"
+      - "web/index.html"
+      - "scripts/check_links.py"
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check every cited source URL
+        # Fails only on genuinely dead links (404/410/DNS). Bot-blocked (403)
+        # and TLS-only (gov cert chains) sources are reported but don't fail.
+        run: python3 scripts/check_links.py --timeout 15 --workers 16
