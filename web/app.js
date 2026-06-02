@@ -30,6 +30,17 @@
 
   var layer = L.layerGroup().addTo(map);
   var enabled = { operational: true, under_construction: true, proposed: true, community_reported: true };
+  var legendRows = {};
+
+  function syncLegend() {
+    Object.keys(legendRows).forEach(function (k) {
+      legendRows[k].classList.toggle("off", !enabled[k]);
+    });
+  }
+  function scrollToMap() {
+    var el = document.getElementById("map-anchor");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   function marker(d) {
     var color = COLOR[d.status] || "#6b7785";
@@ -92,15 +103,42 @@
     document.getElementById("u-water").textContent = water;
 
     var cards = [
-      { n: DATA.length, l: "Total tracked", cls: "" },
-      { n: byStatus.operational || 0, l: "Operational", cls: "" },
-      { n: byStatus.under_construction || 0, l: "Under construction", cls: "" },
-      { n: byStatus.proposed || 0, l: "Proposed", cls: "" },
-      { n: Math.round((water / DATA.length) * 100) + "%", l: "Water-stressed", cls: "water" }
+      { n: DATA.length, l: "Total tracked", cls: "", act: "all" },
+      { n: byStatus.operational || 0, l: "Operational", cls: "", act: "operational" },
+      { n: byStatus.under_construction || 0, l: "Under construction", cls: "", act: "under_construction" },
+      { n: byStatus.proposed || 0, l: "Proposed", cls: "", act: "proposed" },
+      { n: Math.round((water / DATA.length) * 100) + "%", l: "Water-stressed", cls: "water", act: "water" }
     ];
     document.getElementById("statstrip").innerHTML = cards.map(function (c) {
-      return '<div class="stat ' + c.cls + '"><div class="n">' + c.n + '</div><div class="l">' + c.l + "</div></div>";
+      return '<div class="stat ' + c.cls + '" data-act="' + c.act + '" title="Filter the map">' +
+        '<div class="n">' + c.n + '</div><div class="l">' + c.l + "</div></div>";
     }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll(".stat[data-act]"), function (el) {
+      el.addEventListener("click", function () { statCardAction(el.getAttribute("data-act"), el); });
+    });
+  }
+
+  // Clicking a header stat card drives the map filters.
+  function statCardAction(act, el) {
+    var strip = document.getElementById("statstrip");
+    Array.prototype.forEach.call(strip.children, function (c) { c.classList.remove("active"); });
+    if (act === "all") {
+      Object.keys(enabled).forEach(function (k) { enabled[k] = true; });
+      document.getElementById("f-water").checked = false;
+      syncLegend();
+    } else if (act === "water") {
+      var box = document.getElementById("f-water");
+      box.checked = !box.checked;
+      if (box.checked && el) el.classList.add("active");
+    } else {
+      // isolate this status
+      Object.keys(enabled).forEach(function (k) { enabled[k] = (k === act); });
+      document.getElementById("f-water").checked = false;
+      syncLegend();
+      if (el) el.classList.add("active");
+    }
+    render();
+    scrollToMap();
   }
 
   // ---- statistics section ----
@@ -129,10 +167,59 @@
     var max = sorted.length ? sorted[0][1] : 1;
     document.getElementById("statebars").innerHTML = sorted.map(function (kv) {
       var pct = Math.round((kv[1] / max) * 100);
-      return '<div class="bar-row"><span class="name">' + esc(kv[0]) + '</span>' +
+      return '<div class="bar-row" data-state="' + esc(kv[0]) + '" title="Show on map">' +
+        '<span class="name">' + esc(kv[0]) + '</span>' +
         '<span class="track"><span class="fill" style="width:' + pct + '%"></span></span>' +
         '<span class="v">' + kv[1] + "</span></div>";
     }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll(".bar-row[data-state]"), function (el) {
+      el.addEventListener("click", function () {
+        document.getElementById("f-state").value = el.getAttribute("data-state");
+        Object.keys(enabled).forEach(function (k) { enabled[k] = true; });
+        document.getElementById("f-water").checked = false;
+        syncLegend(); render(); scrollToMap();
+      });
+    });
+  }
+
+  // ---- modals (Terms / Privacy) ----
+  function wireModals() {
+    function close() {
+      Array.prototype.forEach.call(document.querySelectorAll(".modal-overlay"), function (m) {
+        m.classList.remove("open");
+      });
+    }
+    Array.prototype.forEach.call(document.querySelectorAll("[data-modal]"), function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        var m = document.getElementById("modal-" + a.getAttribute("data-modal"));
+        if (m) m.classList.add("open");
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".modal-overlay"), function (m) {
+      m.addEventListener("click", function (e) { if (e.target === m) close(); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-close]"), function (b) {
+      b.addEventListener("click", close);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  }
+
+  // ---- nav scroll-spy ----
+  function wireScrollSpy() {
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav.top a[href^="#"]'));
+    var targets = links.map(function (a) {
+      var id = a.getAttribute("href").slice(1);
+      return { a: a, el: document.getElementById(id) };
+    }).filter(function (t) { return t.el; });
+    function onScroll() {
+      var y = window.scrollY + 80, current = null;
+      targets.forEach(function (t) { if (t.el.offsetTop <= y) current = t; });
+      links.forEach(function (a) { a.classList.remove("active"); });
+      if (current) current.a.classList.add("active");
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   }
 
   // ---- legend (toggles) ----
@@ -140,7 +227,7 @@
     var counts = {};
     DATA.forEach(function (d) { counts[d.status] = (counts[d.status] || 0) + 1; });
     var el = document.getElementById("legend");
-    el.innerHTML = "";
+    el.innerHTML = ""; legendRows = {};
     Object.keys(STATUS).forEach(function (k) {
       var s = STATUS[k];
       var row = document.createElement("div");
@@ -152,6 +239,7 @@
         row.classList.toggle("off", !enabled[k]);
         render();
       });
+      legendRows[k] = row;
       el.appendChild(row);
     });
   }
@@ -215,6 +303,10 @@
       render();
     });
     buildHeaderStats(); buildBigStats(); buildStateBars();
-    buildLegend(); buildStateSelect(); wireReport(); render();
+    buildLegend(); buildStateSelect(); wireReport(); wireModals(); wireScrollSpy(); render();
+    // Leaflet measures the container on init; if layout settles a tick later
+    // (fonts, grid sizing), recalc so tiles fill the map instead of staying blank.
+    setTimeout(function () { map.invalidateSize(); }, 200);
+    window.addEventListener("load", function () { map.invalidateSize(); });
   });
 })();
