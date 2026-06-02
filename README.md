@@ -1,5 +1,7 @@
 # India Datacenter Watch
 
+**🔗 Live: https://ashwask.github.io/india-datacenter-watch/**
+
 An open, **community-accountability map of data centers across India** — operational, under
 construction, proposed, and resident-reported — with a public **source link for every facility**.
 
@@ -93,6 +95,24 @@ python3 scripts/check_links.py        # every cited source URL resolves; reports
 CI runs both: `validate_dataset` on every push/PR, and `check_links` weekly + on PRs that touch
 the data. The link checker fails only on genuinely dead links (404/410/DNS); bot-blocked (403) and
 TLS-cert-chain (gov sites) sources are reported but don't fail the build.
+
+## Contributing
+
+`main` is **protected** — all changes land through a **pull request** with the `validate` check green;
+no direct pushes. The flow:
+
+```bash
+git checkout -b your-change
+# … edit; if you touched the dataset, regenerate + validate:
+python3 web/build_data.py && python3 scripts/validate_dataset.py
+git commit -am "Describe the change"
+git push -u origin your-change
+gh pr create            # fills the PR template
+```
+
+CI (`validate`) must pass; `check_links` runs if you touched data/sources. The PR is reviewed, then
+squash-merged into `main`, which auto-deploys to GitHub Pages. Community reports submitted via the
+site's **Submit on GitHub** button arrive as issues we review and promote into `data/datacenters.csv`.
 
 ## Data caveats
 
