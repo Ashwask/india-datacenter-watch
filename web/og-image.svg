@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="-apple-system, Segoe UI, Roboto, Inter, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#11161d"/>
+      <stop offset="1" stop-color="#0b0e12"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#f0883e"/>
+
+  <!-- badge -->
+  <text x="80" y="120" fill="#3fb950" font-size="26" font-weight="700">🌿 Open community-accountability project</text>
+
+  <!-- title -->
+  <text x="78" y="220" fill="#e9eef4" font-size="76" font-weight="800" letter-spacing="-2">India Datacenter Watch</text>
+  <text x="80" y="278" fill="#9aa7b4" font-size="32">A map of every data center across India — and its real costs.</text>
+
+  <!-- stat chips -->
+  <g font-size="30" font-weight="800">
+    <rect x="80" y="330" width="220" height="120" rx="14" fill="#161b22" stroke="#2a323d"/>
+    <text x="104" y="392" fill="#e9eef4">191</text>
+    <text x="104" y="424" fill="#9aa7b4" font-size="18" font-weight="600">FACILITIES</text>
+
+    <rect x="320" y="330" width="220" height="120" rx="14" fill="#161b22" stroke="#2a323d"/>
+    <text x="344" y="392" fill="#e9eef4">46</text>
+    <text x="344" y="424" fill="#9aa7b4" font-size="18" font-weight="600">OPERATORS</text>
+
+    <rect x="560" y="330" width="240" height="120" rx="14" fill="#161b22" stroke="#274b52"/>
+    <text x="584" y="392" fill="#3fb6c4">62%</text>
+    <text x="584" y="424" fill="#9aa7b4" font-size="18" font-weight="600">WATER-STRESSED</text>
+  </g>
+
+  <!-- marker dots -->
+  <g>
+    <circle cx="980" cy="200" r="10" fill="#2ea043"/>
+    <circle cx="1040" cy="260" r="10" fill="#d29922"/>
+    <circle cx="980" cy="320" r="10" fill="#539bf5"/>
+    <circle cx="1060" cy="180" r="10" fill="#db61a2"/>
+    <circle cx="1020" cy="380" r="10" fill="#3fb6c4"/>
+  </g>
+
+  <text x="80" y="560" fill="#6b7785" font-size="24">Sourced · open data · MIT · Built by Studio Ikigai</text>
+</svg>

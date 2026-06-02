@@ -1,0 +1,13 @@
+{
+  "name": "India Datacenter Watch",
+  "short_name": "India DC Watch",
+  "description": "An open, community-accountability map of every data center across India.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e1116",
+  "theme_color": "#0e1116",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

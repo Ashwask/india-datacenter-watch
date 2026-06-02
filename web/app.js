@@ -75,13 +75,17 @@
   function showTab(name) {
     if (!TAB_SECTIONS[name]) name = "map";
     Object.keys(TAB_SECTIONS).forEach(function (tab) {
+      var shown = (tab === name);
       TAB_SECTIONS[tab].forEach(function (id) {
         var el = document.getElementById(id);
-        if (el) el.style.display = (tab === name) ? "" : "none";
+        if (el) { el.style.display = shown ? "" : "none"; el.setAttribute("aria-hidden", shown ? "false" : "true"); }
       });
     });
     Array.prototype.forEach.call(document.querySelectorAll("nav.top a[data-tab]"), function (a) {
-      a.classList.toggle("active", a.getAttribute("data-tab") === name);
+      var sel = a.getAttribute("data-tab") === name;
+      a.classList.toggle("active", sel);
+      a.setAttribute("aria-selected", sel ? "true" : "false");
+      a.setAttribute("tabindex", sel ? "0" : "-1");
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (name === "map" && typeof map !== "undefined") {
@@ -97,6 +101,34 @@
     Array.prototype.forEach.call(document.querySelectorAll(".divider"), function (d) {
       var w = d.closest(".content"); if (w) w.style.display = "none";
     });
+    // ARIA roles on tabs and panels.
+    var tabEls = [];
+    Object.keys(TAB_SECTIONS).forEach(function (tab) {
+      var a = document.querySelector('nav.top a[data-tab="' + tab + '"]');
+      if (a) {
+        a.setAttribute("role", "tab"); a.id = "tab-" + tab;
+        a.setAttribute("aria-controls", TAB_SECTIONS[tab].join(" "));
+        tabEls.push(a);
+      }
+      TAB_SECTIONS[tab].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) { el.setAttribute("role", "tabpanel"); el.setAttribute("tabindex", "0"); el.setAttribute("aria-labelledby", "tab-" + tab); }
+      });
+    });
+    // Keyboard: arrow / home / end move focus between tabs.
+    tabEls.forEach(function (a, i) {
+      a.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showTab(a.getAttribute("data-tab")); return; }
+        var idx = null;
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") idx = (i + 1) % tabEls.length;
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") idx = (i - 1 + tabEls.length) % tabEls.length;
+        else if (e.key === "Home") idx = 0;
+        else if (e.key === "End") idx = tabEls.length - 1;
+        if (idx === null) return;
+        e.preventDefault();
+        var t = tabEls[idx]; showTab(t.getAttribute("data-tab")); t.focus();
+      });
+    });
     // Reverse map: any in-page #anchor link jumps to the tab containing it.
     var idToTab = {};
     Object.keys(TAB_SECTIONS).forEach(function (tab) {
@@ -107,6 +139,12 @@
       if (!a) return;
       var tab = a.getAttribute("data-tab") || idToTab[(a.getAttribute("href") || "").slice(1)];
       if (tab) { e.preventDefault(); showTab(tab); }
+    });
+    // Activate any role="button" element with Enter / Space.
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var t = e.target;
+      if (t && t.getAttribute && t.getAttribute("role") === "button") { e.preventDefault(); t.click(); }
     });
     var rt;
     window.addEventListener("resize", function () {
@@ -217,7 +255,8 @@
       { n: Math.round((water / DATA.length) * 100) + "%", l: "Water-stressed", cls: "water", act: "water" }
     ];
     document.getElementById("statstrip").innerHTML = cards.map(function (c) {
-      return '<div class="stat ' + c.cls + '" data-act="' + c.act + '" title="Filter the map">' +
+      return '<div class="stat ' + c.cls + '" data-act="' + c.act + '" role="button" tabindex="0"' +
+        ' aria-label="' + esc(c.l) + ': ' + c.n + ' — filter the map" title="Filter the map">' +
         '<div class="n">' + c.n + '</div><div class="l">' + c.l + "</div></div>";
     }).join("");
     Array.prototype.forEach.call(document.querySelectorAll(".stat[data-act]"), function (el) {
@@ -346,11 +385,16 @@
       var s = STATUS[k];
       var row = document.createElement("div");
       row.className = "legend-row";
-      row.innerHTML = '<span class="pin ' + s.cls + '"></span><span class="nm">' + s.label +
+      row.setAttribute("role", "button");
+      row.setAttribute("tabindex", "0");
+      row.setAttribute("aria-pressed", enabled[k] ? "true" : "false");
+      row.setAttribute("aria-label", "Toggle " + s.label + " facilities on the map");
+      row.innerHTML = '<span class="pin ' + s.cls + '" aria-hidden="true"></span><span class="nm">' + s.label +
         '</span><span class="cnt">' + (counts[k] || 0) + "</span>";
       row.addEventListener("click", function () {
         enabled[k] = !enabled[k];
         row.classList.toggle("off", !enabled[k]);
+        row.setAttribute("aria-pressed", enabled[k] ? "true" : "false");
         render();
       });
       legendRows[k] = row;
@@ -770,6 +814,11 @@
 
   function wireConcerns() {
     Array.prototype.forEach.call(document.querySelectorAll(".concern[data-concern]"), function (el) {
+      el.setAttribute("role", "button");
+      el.setAttribute("tabindex", "0");
+      var h = el.querySelector("h3");
+      el.setAttribute("aria-label", (h ? h.textContent : "concern") + " — open data and trends");
+      var ic = el.querySelector(".ic"); if (ic) ic.setAttribute("aria-hidden", "true");
       el.addEventListener("click", function () { openConcern(el.getAttribute("data-concern")); });
     });
   }
@@ -794,7 +843,7 @@
     var el = document.getElementById("impact-stats"); if (!el) return;
     el.innerHTML = ISTATS.map(function (s) {
       var go = s.theme === "all" ? "See all reports →" : "See " + s.theme + " reports →";
-      return '<div class="istat" data-theme="' + esc(s.theme) + '" title="Filter the reports below">' +
+      return '<div class="istat" data-theme="' + esc(s.theme) + '" role="button" tabindex="0" aria-label="' + esc(s.stat) + ' — see related reports" title="Filter the reports below">' +
         '<div class="v">' + esc(s.value) + '</div>' +
         '<div class="s">' + esc(s.stat) + '</div>' +
         '<a href="' + esc(s.url) + '" target="_blank" rel="noopener" data-src="1">' + esc(s.attribution) + " ↗</a>" +
@@ -827,7 +876,7 @@
     var themes = ["all"].concat(Array.from(new Set(STORIES.map(function (s) { return s.theme; }))).sort());
     el.innerHTML = themes.map(function (t) {
       var n = t === "all" ? STORIES.length : STORIES.filter(function (s) { return s.theme === t; }).length;
-      return '<span class="chip' + (t === impactTheme ? " active" : "") + '" data-theme="' + t + '">' +
+      return '<span class="chip' + (t === impactTheme ? " active" : "") + '" data-theme="' + t + '" role="button" tabindex="0">' +
         (t === "all" ? "All" : t) + " · " + n + "</span>";
     }).join("");
     Array.prototype.forEach.call(el.querySelectorAll(".chip"), function (chip) {
@@ -867,7 +916,7 @@
     }));
     el.innerHTML = cats.map(function (t) {
       var n = t === "all" ? ACTIONS.length : ACTIONS.filter(function (a) { return a.cat === t; }).length;
-      return '<span class="chip' + (t === actionCat ? " active" : "") + '" data-cat="' + t + '">' +
+      return '<span class="chip' + (t === actionCat ? " active" : "") + '" data-cat="' + t + '" role="button" tabindex="0">' +
         (t === "all" ? "All" : CAT_LABEL[t]) + " · " + n + "</span>";
     }).join("");
     Array.prototype.forEach.call(el.querySelectorAll(".chip"), function (chip) {
