@@ -66,7 +66,12 @@
       a.classList.toggle("active", a.getAttribute("data-tab") === name);
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
-    if (name === "map" && typeof map !== "undefined") setTimeout(function () { map.invalidateSize(); }, 60);
+    if (name === "map" && typeof map !== "undefined") {
+      // Container just became visible / resized — recompute so tiles fill it.
+      requestAnimationFrame(function () { map.invalidateSize(); });
+      setTimeout(function () { map.invalidateSize(); }, 120);
+      setTimeout(function () { map.invalidateSize(); }, 350);
+    }
     if (name === "impact") persistentCharts.forEach(function (c) { try { c.resize(); } catch (e) {} });
   }
   function setupTabs() {
@@ -84,6 +89,11 @@
       if (!a) return;
       var tab = a.getAttribute("data-tab") || idToTab[(a.getAttribute("href") || "").slice(1)];
       if (tab) { e.preventDefault(); showTab(tab); }
+    });
+    var rt;
+    window.addEventListener("resize", function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () { if (typeof map !== "undefined") map.invalidateSize(); }, 150);
     });
     showTab("map");
   }

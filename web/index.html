@@ -53,7 +53,12 @@
   .stat.water .n{color:var(--water)}
 
   .layout{display:grid;grid-template-columns:312px 1fr;align-items:stretch}
-  @media (max-width:880px){ .layout{grid-template-columns:1fr} aside{max-height:none} #map{height:60vh} }
+  @media (max-width:880px){
+    /* Map is the point of this tab — show it first, filters below. */
+    .layout{display:flex;flex-direction:column}
+    #map{height:64vh;order:1}
+    aside{max-height:none;order:2;border-right:none;border-top:1px solid var(--line)}
+  }
   aside{border-right:1px solid var(--line);overflow-y:auto;padding:18px 16px;background:var(--panel);max-height:72vh}
   aside h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 10px}
   .filt{margin-bottom:22px}
